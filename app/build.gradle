@@ -11,6 +11,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -26,4 +30,25 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+
+    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'      //核心必须依赖
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'    //经典刷新头
+    //compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-4'
+
+    //Google官方权限适配器 For developers using AndroidX in their applications
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+    //Recyclerview 适配器
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
+
+    //金丝雀 控件加载器
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+    //Glide 图片加载器
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation 'com.google.android.material:material:1.0.0'
+
+
 }
