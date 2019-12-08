@@ -2,8 +2,10 @@ package com.hd.shopdemo.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.util.Log;
 
 public class ImageUtil {
@@ -174,4 +176,33 @@ public class ImageUtil {
                 height, matrix, true);
         return resizedBitmap;
     }
+
+
+    /**
+     * 以指定坐标为中心点，绘制文字
+     *
+     * @param bm
+     * @return
+     */
+    public static Bitmap drawTextToBitmap(Bitmap bm, String text, int textColor, int textSize, int x, int y) {
+        if (bm == null)
+            return null;
+        Canvas canvas = new Canvas(bm);
+        Paint textPaint = new Paint();
+        // 抗锯齿
+        textPaint.setAntiAlias(true);
+        // 防抖动
+        textPaint.setDither(true);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(textSize);
+        textPaint.setColor(textColor);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        //计算baseline
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+        float distance = (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
+        float baseline = y + distance;
+        canvas.drawText(text, x, baseline, textPaint);
+        return bm;
+    }
+
 }

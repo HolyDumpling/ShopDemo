@@ -16,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:srlEnablePreviewInEditMode="false">
-
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -29,7 +28,6 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <RelativeLayout
                     android:id="@+id/rl_mine_Header"
                     android:layout_width="match_parent"
@@ -47,7 +45,7 @@
 
                         <LinearLayout
                             android:layout_weight="2"
-                            android:background="@color/emptyGray"
+                            android:background="@color/bgGray"
                             android:layout_width="match_parent"
                             android:layout_height="0dp">
 
@@ -61,17 +59,27 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/iv_header"
+                    <RelativeLayout
                         android:layout_marginLeft="20dp"
-                        android:background="@color/statusBgColor"
                         android:layout_width="50dp"
-                        android:layout_height="50dp" />
-                </RelativeLayout>
+                        android:layout_height="50dp">
 
+                        <ImageView
+                            android:id="@+id/iv_header"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:id="@+id/iv_header_hat"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp" />
+                    </RelativeLayout>
+                </RelativeLayout>
                 <LinearLayout
                     android:orientation="vertical"
-                    android:background="@color/emptyGray"
+                    android:background="@color/bgGray"
+                    android:paddingBottom="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <GridLayout
@@ -156,117 +164,250 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
-                        android:padding="10dp"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
-                            android:text="我的订单:"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="我的订单:"
+                                android:textColor="@color/text_h2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:gravity="end"
+                                android:text="查看全部订单 >"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_h3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_marginTop="10dp"
+                            android:background="@color/mine_order_stroke"
+                            android:layout_width="match_parent"
+                            android:layout_height="1px" />
 
                         <GridLayout
                             android:layout_marginTop="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginBottom="10dp"
                             android:columnCount="5"
                             android:rowCount="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <LinearLayout
-                                android:gravity="center"
                                 android:orientation="vertical"
                                 android:layout_columnWeight="1"
                                 android:layout_width="0dp"
+                                android:gravity="center"
                                 android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:text="16"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                <RelativeLayout
+                                    android:gravity="center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
+                                    <ImageView
+                                        android:paddingTop="2dp"
+                                        android:paddingLeft="6dp"
+                                        android:paddingRight="6dp"
+                                        android:id="@+id/iv_mine_dzf"
+                                        android:src="@mipmap/my_icon_dzf"
+                                        android:layout_width="38dp"
+                                        android:layout_height="28dp" />
+
+                                    <TextView
+                                        android:layout_alignRight="@id/iv_mine_dzf"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:textColor="@color/text_h2"
+                                        android:background="@drawable/bg_mine_order_subscript"
+                                        android:text="16"
+                                        android:textStyle="bold"
+                                        android:textSize="12sp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </RelativeLayout>
                                 <TextView
                                     android:layout_marginTop="5dp"
-                                    android:text="代付款"
+                                    android:text="待付款"
+                                    android:textColor="@color/text_h2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
-
                             <LinearLayout
-                                android:gravity="center"
                                 android:orientation="vertical"
                                 android:layout_columnWeight="1"
                                 android:layout_width="0dp"
+                                android:gravity="center"
                                 android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:text="16"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                <RelativeLayout
+                                    android:gravity="center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
+                                    <ImageView
+                                        android:paddingTop="2dp"
+                                        android:paddingLeft="6dp"
+                                        android:paddingRight="6dp"
+                                        android:id="@+id/iv_mine_dfh"
+                                        android:src="@mipmap/my_icon_dfh"
+                                        android:layout_width="38dp"
+                                        android:layout_height="28dp" />
+
+                                    <TextView
+                                        android:layout_alignRight="@id/iv_mine_dfh"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:textColor="@color/text_h2"
+                                        android:background="@drawable/bg_mine_order_subscript"
+                                        android:text="16"
+                                        android:textStyle="bold"
+                                        android:textSize="12sp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </RelativeLayout>
                                 <TextView
                                     android:layout_marginTop="5dp"
                                     android:text="待发货"
+                                    android:textColor="@color/text_h2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
-
                             <LinearLayout
-                                android:gravity="center"
                                 android:orientation="vertical"
                                 android:layout_columnWeight="1"
                                 android:layout_width="0dp"
+                                android:gravity="center"
                                 android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:text="16"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                <RelativeLayout
+                                    android:gravity="center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
+                                    <ImageView
+                                        android:paddingTop="2dp"
+                                        android:paddingLeft="6dp"
+                                        android:paddingRight="6dp"
+                                        android:id="@+id/iv_mine_dsh"
+                                        android:src="@mipmap/my_icon_dsh"
+                                        android:layout_width="38dp"
+                                        android:layout_height="28dp" />
+
+                                    <TextView
+                                        android:layout_alignRight="@id/iv_mine_dsh"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:textColor="@color/text_h2"
+                                        android:background="@drawable/bg_mine_order_subscript"
+                                        android:text="16"
+                                        android:textStyle="bold"
+                                        android:textSize="12sp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </RelativeLayout>
                                 <TextView
                                     android:layout_marginTop="5dp"
                                     android:text="待收货"
+                                    android:textColor="@color/text_h2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
-
                             <LinearLayout
-                                android:gravity="center"
                                 android:orientation="vertical"
                                 android:layout_columnWeight="1"
                                 android:layout_width="0dp"
+                                android:gravity="center"
                                 android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:text="16"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                <RelativeLayout
+                                    android:gravity="center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
+                                    <ImageView
+                                        android:paddingTop="2dp"
+                                        android:paddingLeft="6dp"
+                                        android:paddingRight="6dp"
+                                        android:id="@+id/iv_mine_dpj"
+                                        android:src="@mipmap/my_icon_dpj"
+                                        android:layout_width="38dp"
+                                        android:layout_height="28dp" />
+
+                                    <TextView
+                                        android:layout_alignRight="@id/iv_mine_dpj"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:textColor="@color/text_h2"
+                                        android:background="@drawable/bg_mine_order_subscript"
+                                        android:text="16"
+                                        android:textStyle="bold"
+                                        android:textSize="12sp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </RelativeLayout>
                                 <TextView
                                     android:layout_marginTop="5dp"
                                     android:text="待评价"
+                                    android:textColor="@color/text_h2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
-
                             <LinearLayout
-                                android:gravity="center"
                                 android:orientation="vertical"
                                 android:layout_columnWeight="1"
                                 android:layout_width="0dp"
+                                android:gravity="center"
                                 android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:text="16"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                <RelativeLayout
+                                    android:gravity="center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
+                                    <ImageView
+                                        android:paddingTop="2dp"
+                                        android:paddingLeft="6dp"
+                                        android:paddingRight="6dp"
+                                        android:id="@+id/iv_mine_thsh"
+                                        android:src="@mipmap/my_icon_thsh"
+                                        android:layout_width="38dp"
+                                        android:layout_height="28dp" />
+
+                                    <TextView
+                                        android:layout_alignRight="@id/iv_mine_thsh"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:textColor="@color/text_h2"
+                                        android:background="@drawable/bg_mine_order_subscript"
+                                        android:text="16"
+                                        android:textStyle="bold"
+                                        android:textSize="12sp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                </RelativeLayout>
                                 <TextView
                                     android:layout_marginTop="5dp"
-                                    android:text="维权售后"
+                                    android:text="售后服务"
+                                    android:textColor="@color/text_h2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
+
                         </GridLayout>
                     </LinearLayout>
                     <GridLayout
@@ -288,8 +429,7 @@
                             android:layout_height="match_parent">
                             <ImageView
                                 android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:background="#ff0000" />
+                                android:layout_height="20dp" />
                             <TextView
                                 android:layout_marginLeft="5dp"
                                 android:textSize="14sp"
@@ -298,7 +438,7 @@
                                 android:layout_height="wrap_content" />
                             <TextView
                                 android:textSize="14sp"
-                                android:text="55555"
+                                android:text="55555555"
                                 android:maxLines="1"
                                 android:ellipsize="end"
                                 android:layout_width="wrap_content"
@@ -311,8 +451,7 @@
                             android:layout_height="match_parent">
                             <ImageView
                                 android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:background="#ff0000" />
+                                android:layout_height="20dp" />
                             <TextView
                                 android:layout_marginLeft="5dp"
                                 android:textSize="14sp"
@@ -337,8 +476,7 @@
                             android:layout_height="match_parent">
                             <ImageView
                                 android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:background="#ff0000" />
+                                android:layout_height="20dp" />
                             <TextView
                                 android:layout_marginLeft="5dp"
                                 android:textSize="14sp"
@@ -361,8 +499,7 @@
                             android:layout_height="match_parent">
                             <ImageView
                                 android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:background="#ff0000" />
+                                android:layout_height="20dp" />
                             <TextView
                                 android:layout_marginLeft="5dp"
                                 android:textSize="14sp"
@@ -382,7 +519,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
-                        android:layout_marginBottom="15dp"
                         android:background="@drawable/bg_btn_circular_10_white"
                         android:columnCount="3"
                         android:rowCount="3"
@@ -398,7 +534,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_dd" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -415,7 +551,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_fl" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -432,7 +568,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_kf" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -450,7 +586,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_xfq" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -468,7 +604,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_wytx" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -486,7 +622,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_dzgl" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -504,7 +640,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_zjmx" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -522,7 +658,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_more" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -540,7 +676,7 @@
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="#ff0000" />
+                                android:src="@mipmap/my_icon_exit" />
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:textSize="14sp"
@@ -549,10 +685,117 @@
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
                     </GridLayout>
+
+                    <GridLayout
+                        android:columnCount="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/bg_btn_circular_10_white"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_columnWeight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="200dp">
+
+                            <TextView
+                                android:text="活动A"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="15dp"
+                            android:background="@drawable/bg_btn_circular_10_white"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_columnWeight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="200dp">
+
+                            <TextView
+                                android:text="活动B"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/bg_btn_circular_10_white"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_columnWeight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="200dp">
+
+                            <TextView
+                                android:text="活动C"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="15dp"
+                            android:background="@drawable/bg_btn_circular_10_white"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_columnWeight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="200dp">
+
+                            <TextView
+                                android:text="活动D"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/bg_btn_circular_10_white"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_columnWeight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="200dp">
+
+                            <TextView
+                                android:text="活动E"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="15dp"
+                            android:background="@drawable/bg_btn_circular_10_white"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_columnWeight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="200dp">
+
+                            <TextView
+                                android:text="活动F"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </GridLayout>
                 </LinearLayout>
             </LinearLayout>
         </com.hd.shopdemo.widget.JudgeNestedScrollView>
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-
     <include layout="@layout/nav_title" />
 </FrameLayout>

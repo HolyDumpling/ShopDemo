@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.hd.shopdemo.R;
 import com.hd.shopdemo.app.AppConfig;
 import com.hd.shopdemo.utils.TextUtil;
+import com.hd.shopdemo.utils.glide_utils.GlideUtils;
 import com.hd.shopdemo.utils.status_bar_utils.StatusBarUtil;
 
 
@@ -27,12 +28,14 @@ public abstract class BaseFragment extends Fragment {
     protected Activity mActivity;
     protected View rootView;
 
+    protected GlideUtils glideUtils;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
         mActivity = getActivity();
+        glideUtils = new GlideUtils(mContext);
     }
 
     protected abstract void initViews();

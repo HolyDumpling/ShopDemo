@@ -35,6 +35,19 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
+
+    <TextView
+        android:id="@+id/nav_tv_title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/statusTextColor"
+        android:textSize="18sp" />
+
     <LinearLayout
         android:id="@+id/nav_right2"
         android:layout_width="50dp"
@@ -64,16 +77,4 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/nav_tv_title"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textColor="@color/statusTextColor"
-        android:textSize="18sp" />
 </LinearLayout>

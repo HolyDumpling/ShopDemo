@@ -45,8 +45,12 @@ public class MineFragment extends BaseFragment {
     RelativeLayout rl_mine_Header;
     @BindView(R.id.iv_mine_HeaderBg)
     ImageView iv_mine_HeaderBg;
-    int iv_top_hideHeight = 0;
-    int iv_bottom_hideHeight = 0;
+    @BindView(R.id.iv_header_hat)
+    ImageView iv_header_hat;
+    @BindView(R.id.iv_header)
+    ImageView iv_header;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,11 +85,14 @@ public class MineFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
-        int maxH = ImageUtil.dip2px(mContext, 300);
-        int dp_50 = ImageUtil.dip2px(mContext, 50);
         int screenWidth = ImageUtil.getScreenWidth(mContext);
         int headerImgHeigt = screenWidth * 4 / 3;
-        iv_bottom_hideHeight = iv_top_hideHeight = headerImgHeigt / 4;
+        int dp_50 = ImageUtil.dip2px(mContext, 50);
+        int maxH = (headerImgHeigt / 2) - (dp_50);
+        int iv_top_hideHeight = headerImgHeigt / 4;
+
+
+        glideUtils.intoImageAndHat(R.mipmap.icon_mine_head, iv_header, R.mipmap.w700_b120_type1, iv_header_hat, dp_50, 12.0 / 70.0);
         FrameLayout.LayoutParams lp_iv_mine_HeaderBg = (FrameLayout.LayoutParams) iv_mine_HeaderBg.getLayoutParams();
         lp_iv_mine_HeaderBg.topMargin = -iv_top_hideHeight;
         iv_mine_HeaderBg.setLayoutParams(lp_iv_mine_HeaderBg);
@@ -173,11 +180,17 @@ public class MineFragment extends BaseFragment {
 
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (oldScrollY > maxH)
+                    oldScrollY = maxH;
+                if (scrollY > maxH)
+                    scrollY = maxH;
                 float translationY = iv_mine_HeaderBg.getTranslationY() + (oldScrollY - scrollY);
-                iv_mine_HeaderBg.setTranslationY(translationY);
-                LogUtil.i("滑动事件：" + oldScrollY + " , " + scrollY + " , " + iv_mine_HeaderBg.getTranslationY() + " , " + translationY);
-                alpha = (float) (scrollY * 1.0 / maxH);
-                setStatusBg("#506bde", alpha);
+                if (maxH > scrollY || maxH > oldScrollY) {
+                    LogUtil.i("滑动事件：" + oldScrollY + " , " + scrollY + " , " + iv_mine_HeaderBg.getTranslationY() + " , " + translationY);
+                    iv_mine_HeaderBg.setTranslationY(translationY);
+                    alpha = (float) (scrollY * 1.0 / maxH);
+                    setStatusBg("#506bde", alpha);
+                }
 
                 if (alpha < 0.5) {
                     if (isDarkMode)

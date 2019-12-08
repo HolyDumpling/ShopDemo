@@ -44,7 +44,10 @@ public class RoundTransform extends BitmapTransformation {
      * @param drawView 将圆角画在哪里（true:绘制在屏幕边缘，false:绘制在图像边缘）
      */
     public RoundTransform(int dp, int corners, boolean drawView) {
-        this.radius = (int) (Resources.getSystem().getDisplayMetrics().density * dp);
+        if (dp != -1)
+            this.radius = (int) (Resources.getSystem().getDisplayMetrics().density * dp);
+        else
+            this.radius = dp;
         this.corners = corners;
         this.drawView = drawView;
     }
@@ -88,6 +91,13 @@ public class RoundTransform extends BitmapTransformation {
             } else {
                 imageW = toTransform.getWidth();
                 imageH = toTransform.getHeight();
+            }
+
+            if (radius == -1) {
+                if (imageW > imageH)
+                    radius = imageH / 2;
+                else
+                    radius = imageW / 2;
             }
 
             //得到glide中BitmapPool的bitmap位图对象
