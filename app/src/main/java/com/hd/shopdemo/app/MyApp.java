@@ -3,6 +3,8 @@ package com.hd.shopdemo.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.hd.shopdemo.utils.websocket.MyWebSocketClient;
+
 public class MyApp extends Application {
     public static Context application;
     public static MyApp instance;
@@ -23,6 +25,9 @@ public class MyApp extends Application {
         // 引用
         application = this;
         instance = this;
+
+        MyWebSocketClient.getInstance().connect();
+
     }
 
     private void initData() {

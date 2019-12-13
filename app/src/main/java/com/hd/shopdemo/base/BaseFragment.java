@@ -33,7 +33,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mContext = getActivity();
+        mContext = getContext();
         mActivity = getActivity();
         glideUtils = new GlideUtils(mContext);
     }
@@ -148,19 +148,16 @@ public abstract class BaseFragment extends Fragment {
     }
 
 
-    protected void setStatusBg(String bgColor) {
+    protected void setStatusBg(int bgColor) {
         setStatusBg(bgColor, 1);
     }
 
-    protected void setStatusBg(String bgColor, @FloatRange(from = 0.0, to = 1.0) double alpha) {
-        if (TextUtil.isEmpty(bgColor))
-            return;
-        int color = Color.parseColor(bgColor);
+    protected void setStatusBg(int bgColor, @FloatRange(from = 0.0, to = 1.0) double alpha) {
         StatusBarUtil.immersive(mActivity);
         LinearLayout nav_ll_title = rootView.findViewById(R.id.nav_ll_title);
         //nav_ll_title.setBackgroundColor(color);
         nav_ll_title.setAlpha((float) alpha);
-        nav_ll_title.setBackgroundColor(color);
+        nav_ll_title.setBackgroundColor(bgColor);
     }
 
     protected void setStatusTitle(String title) {

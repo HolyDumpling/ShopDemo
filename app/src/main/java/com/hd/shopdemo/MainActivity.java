@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hd.shopdemo.app.PermissionCode;
 import com.hd.shopdemo.base.BaseActivity;
+import com.hd.shopdemo.ui.main.HomeFragment;
 import com.hd.shopdemo.ui.main.MineFragment;
 import com.hd.shopdemo.utils.LogUtil;
 
@@ -31,7 +32,7 @@ public class MainActivity extends BaseActivity {
      */
     @SuppressWarnings("unchecked")
     public final static Class<Fragment>[] MAIN_TAB_FRAGMENTS = new Class[]{
-            MineFragment.class,
+            HomeFragment.class,
             MineFragment.class,
             MineFragment.class,
             MineFragment.class
@@ -41,7 +42,7 @@ public class MainActivity extends BaseActivity {
     public Fragment[] mFragments;
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
-    private int preBtnIndex = 0;
+    private static int preBtnIndex = 0;
     private FragmentManager fragmentManager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,6 +66,9 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    public static int getmPrevious() {
+        return preBtnIndex;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

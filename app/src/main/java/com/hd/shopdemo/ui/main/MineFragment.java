@@ -12,10 +12,14 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 
+import com.hd.shopdemo.MainActivity;
 import com.hd.shopdemo.R;
+import com.hd.shopdemo.app.AppConfig;
+import com.hd.shopdemo.app.AppIntent;
 import com.hd.shopdemo.base.BaseFragment;
 import com.hd.shopdemo.utils.ImageUtil;
 import com.hd.shopdemo.utils.LogUtil;
+import com.hd.shopdemo.utils.glide_utils.ResizeTransform;
 import com.hd.shopdemo.utils.status_bar_utils.StatusBarUtil;
 import com.hd.shopdemo.widget.JudgeNestedScrollView;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -28,12 +32,12 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 我的记录
  */
 public class MineFragment extends BaseFragment {
-
 
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
@@ -50,7 +54,12 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.iv_header)
     ImageView iv_header;
 
-
+    @BindView(R.id.image_1)
+    ImageView image_1;
+    @BindView(R.id.image_2)
+    ImageView image_2;
+    @BindView(R.id.image_3)
+    ImageView image_3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,12 +68,12 @@ public class MineFragment extends BaseFragment {
         return rootView;
     }
 
+    int statusBarBgColor;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        statusBarBgColor = StatusBarUtil.getStatusBarBg(mActivity);
         StatusBarUtil.setPaddingSmart(mActivity, nav_ll_title);
-        StatusBarUtil.immersive(mActivity);
-        setStatusBg("#506bde", 0);
         initNav("我的");
         initViews();
         initDatas();
@@ -73,15 +82,25 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        initDatas();
+        if (MainActivity.getmPrevious() == 3) {
+            StatusBarUtil.immersive(mActivity, statusBarBgColor, 0);
+            setStatusBg(statusBarBgColor, 0);
+            initDatas();
+        }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
+            StatusBarUtil.immersive(mActivity, statusBarBgColor, 0);
+            setStatusBg(statusBarBgColor, 0);
             initViews();
         }
     }
+
+    String imageURL_1 = AppConfig.ip + "/public/images/image_001.jpg";
+    String imageURL_2 = AppConfig.ip + "/public/images/image_002.jpg";
+    String imageURL_3 = AppConfig.ip + "/public/images/image_003.jpg";
 
     @Override
     protected void initViews() {
@@ -90,6 +109,10 @@ public class MineFragment extends BaseFragment {
         int dp_50 = ImageUtil.dip2px(mContext, 50);
         int maxH = (headerImgHeigt / 2) - (dp_50);
         int iv_top_hideHeight = headerImgHeigt / 4;
+
+        glideUtils.intoImage(imageURL_1, image_1, new ResizeTransform(ResizeTransform.LONG_SIDE_SCALING, ""));
+        glideUtils.intoImage(imageURL_2, image_2, new ResizeTransform(ResizeTransform.LONG_SIDE_SCALING, ""));
+        glideUtils.intoImage(imageURL_3, image_3, new ResizeTransform(ResizeTransform.LONG_SIDE_SCALING, ""));
 
 
         glideUtils.intoImageAndHat(R.mipmap.icon_mine_head, iv_header, R.mipmap.w700_b120_type1, iv_header_hat, dp_50, 12.0 / 70.0);
@@ -189,7 +212,7 @@ public class MineFragment extends BaseFragment {
                     LogUtil.i("滑动事件：" + oldScrollY + " , " + scrollY + " , " + iv_mine_HeaderBg.getTranslationY() + " , " + translationY);
                     iv_mine_HeaderBg.setTranslationY(translationY);
                     alpha = (float) (scrollY * 1.0 / maxH);
-                    setStatusBg("#506bde", alpha);
+                    setStatusBg(statusBarBgColor, alpha);
                 }
 
                 if (alpha < 0.5) {
@@ -209,5 +232,13 @@ public class MineFragment extends BaseFragment {
 
     }
 
+    @OnClick(R.id.ll_my_icon_dd)
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ll_my_icon_dd:
+                startActivity(AppIntent.getGameActivity(mContext));
+                break;
+        }
+    }
 
 }

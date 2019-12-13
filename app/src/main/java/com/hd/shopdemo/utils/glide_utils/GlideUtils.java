@@ -12,7 +12,6 @@ import androidx.annotation.RawRes;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.hd.shopdemo.app.GlideApp;
 
 /**
@@ -27,15 +26,26 @@ public class GlideUtils {
     }
 
     public void intoImage(String url, ImageView imageView, @NonNull Transformation... transformations) {
-        GlideApp.with(mContext)
-                .load(url)
-                .skipMemoryCache(true)//禁用内存缓存
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//进入硬盘缓存
-                .transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
-                //.error(R.mipmap.image_loading)    //错误加载
-                //.placeholder(R.mipmap.image_loading)   //加载图
-                .transform(new MultiTransformation(transformations))
-                .into(imageView);
+        if (transformations.length > 0) {
+            GlideApp.with(mContext)
+                    .load(url)
+                    .skipMemoryCache(true)//禁用内存缓存
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//进入硬盘缓存
+                    //.transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
+                    //.error(R.mipmap.image_loading)    //错误加载
+                    //.placeholder(R.mipmap.image_loading)   //加载图
+                    .transform(new MultiTransformation(transformations))
+                    .into(imageView);
+        } else {
+            GlideApp.with(mContext)
+                    .load(url)
+                    .skipMemoryCache(true)//禁用内存缓存
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//进入硬盘缓存
+                    //.transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
+                    //.error(R.mipmap.image_loading)    //错误加载
+                    //.placeholder(R.mipmap.image_loading)   //加载图
+                    .into(imageView);
+        }
     }
 
     public void intoImage(@RawRes @DrawableRes @Nullable Integer id, ImageView imageView, @NonNull Transformation... transformations) {
@@ -43,7 +53,7 @@ public class GlideUtils {
                 .load(id)
                 .skipMemoryCache(true)//禁用内存缓存
                 .diskCacheStrategy(DiskCacheStrategy.NONE)//进入硬盘缓存
-                .transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
+                //.transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
                 //.error(R.mipmap.image_loading)    //错误加载
                 //.placeholder(R.mipmap.image_loading)   //加载图
                 .transform(new MultiTransformation(transformations))
@@ -59,7 +69,7 @@ public class GlideUtils {
         img_iv.setLayoutParams(lp_img);
         GlideApp.with(mContext)
                 .load(img_id)
-                .transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
+                //.transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
                 .transform(new MultiTransformation(new RoundTransform(-1, RoundTransform.CORNER_ALL, true)))
                 .into(img_iv);
         GlideApp.with(mContext)

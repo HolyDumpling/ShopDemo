@@ -3,6 +3,7 @@ package com.hd.shopdemo.utils.status_bar_utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
@@ -13,6 +14,10 @@ import android.view.WindowManager;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.RequiresApi;
+
+import com.hd.shopdemo.R;
+import com.hd.shopdemo.app.AppConfig;
+import com.hd.shopdemo.utils.TextUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -37,6 +42,29 @@ public class StatusBarUtil {
 
     public static void immersive(Activity activity, int color, @FloatRange(from = 0.0, to = 1.0) double alpha) {
         immersive(activity.getWindow(), color, alpha);
+    }
+
+
+    public static int getStatusBarBg(Activity mActivity) {
+        if (!TextUtil.isEmpty(AppConfig.statusBgColor))
+            return Color.parseColor(AppConfig.statusBgColor);
+        else
+            return mActivity.getResources().getColor(R.color.statusBgColor);
+    }
+
+    public static int getStatusBarBg(Context mContext) {
+        if (!TextUtil.isEmpty(AppConfig.statusBgColor))
+            return Color.parseColor(AppConfig.statusBgColor);
+        else
+            return mContext.getResources().getColor(R.color.statusBgColor);
+    }
+
+
+    public static int getStatusBarTextColor(Activity mActivity) {
+        if (!TextUtil.isEmpty(AppConfig.statusTextColor))
+            return Color.parseColor(AppConfig.statusTextColor);
+        else
+            return mActivity.getResources().getColor(R.color.statusTextColor);
     }
 
     public static void immersive(Activity activity, int color) {
