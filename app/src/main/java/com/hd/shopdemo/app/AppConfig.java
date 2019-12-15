@@ -6,6 +6,9 @@ import java.net.URI;
  * 配置文件
  */
 public class AppConfig {
+    // 生产服务器    https://he.keduoduo100.com
+    // 测试服务器    https://bz100.snmun.com
+    public final static String APP_SERVER_ADDRESS = "https://bz100.snmun.com";
     public static URI websocketUIR = URI.create("http://192.168.1.7:3000");
     //public static URI websocketUIR = URI.create("ws://echo.websocket.org");
     //全部页面中，标题颜色以及系统状态栏颜色

@@ -1,6 +1,7 @@
 package com.hd.shopdemo.utils.retrofit_utils;
 
 
+import com.hd.shopdemo.app.AppConfig;
 import com.hd.shopdemo.bean.DataDemoBean;
 
 import org.json.JSONException;
@@ -19,9 +20,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitUtil {
-    // 生产服务器    https://he.keduoduo100.com
-    // 测试服务器    https://bz100.snmun.com
-    public final static String APP_SERVER_ADDR = "https://bz100.snmun.com";
     private static final int DEFAULT_TIMEOUT = 15;
     private Retrofit mRetrofit;
     private ApiServer mApiServer;
@@ -38,7 +36,7 @@ public class RetrofitUtil {
                 .retryOnConnectionFailure(true);//默认重连一次，若需要重试N次，则要实现拦截器。
 
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(APP_SERVER_ADDR)
+                .baseUrl(AppConfig.APP_SERVER_ADDRESS)
                 .addConverterFactory(GsonConverterFactory.create())
                 //支持RxJava2
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

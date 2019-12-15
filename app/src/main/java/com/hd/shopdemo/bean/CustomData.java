@@ -7,7 +7,7 @@ public class CustomData {
     private String backColor;
     private boolean isMovie;
     private String type;
-    private String pid;
+    private String gid;
     private String sid;
     private String link;
 
@@ -18,23 +18,23 @@ public class CustomData {
         this.isMovie = isMovie;
     }
 
-    public CustomData(String url, String name, String backColor, boolean isMovie, String type, String pid, String sid, String link) {
+    public CustomData(String url, String name, String backColor, boolean isMovie, String type, String gid, String sid, String link) {
         this.url = url;
         this.name = name;
         this.backColor = backColor;
         this.isMovie = isMovie;
         this.type = type;
-        this.pid = pid;
+        this.gid = gid;
         this.sid = sid;
         this.link = link;
     }
 
-    public CustomData(String url, String name, boolean isMovie, String type, String pid, String sid) {
+    public CustomData(String url, String name, boolean isMovie, String type, String gid, String sid) {
         this.url = url;
         this.name = name;
         this.isMovie = isMovie;
         this.type = type;
-        this.pid = pid;
+        this.gid = gid;
         this.sid = sid;
     }
 
@@ -78,12 +78,12 @@ public class CustomData {
         this.type = type;
     }
 
-    public String getPid() {
-        return pid;
+    public String getGid() {
+        return gid;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
+    public void setGid(String gid) {
+        this.gid = gid;
     }
 
     public String getSid() {

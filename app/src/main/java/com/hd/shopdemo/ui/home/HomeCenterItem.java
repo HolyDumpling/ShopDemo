@@ -1,6 +1,7 @@
 package com.hd.shopdemo.ui.home;
 
 import com.hd.shopdemo.bean.CustomData;
+import com.hd.shopdemo.bean.HomeContentBean;
 import com.hd.shopdemo.widget.my_brvah.MyMultiItemEntity;
 
 import java.util.ArrayList;
@@ -44,6 +45,10 @@ public class HomeCenterItem extends MyMultiItemEntity {
     private String btText_1;
     //按钮2
     private String btText_2;
+
+    private String data_1;
+    private String data_2;
+
     //序号
     private int position;
     //顶部是否是圆角
@@ -51,15 +56,69 @@ public class HomeCenterItem extends MyMultiItemEntity {
     //底部是否是圆角
     private boolean bottomRounded;
 
+
+    public HomeCenterItem(int itemType, int spanSize, List<CustomData> bannerList) {
+        this.itemType = itemType;
+        this.spanSize = spanSize;
+        this.bannerList = bannerList;
+    }
+
+    public HomeCenterItem(int itemType, HomeContentBean.SingleItem_1_Data singleItem_1_data) {
+        this.itemType = itemType;
+        this.spanSize = 10;
+        this.imgUrl = singleItem_1_data.getImg();
+        this.title = singleItem_1_data.getTitle();
+    }
+
+    public HomeCenterItem(int itemType, HomeContentBean.SingleItem_2_Data singleItem_2_data) {
+        this.itemType = itemType;
+        this.spanSize = 10;
+        this.imgUrl = singleItem_2_data.getImg();
+        this.title = singleItem_2_data.getTitle();
+    }
+
     public HomeCenterItem(int itemType, int spanSize, String imgUrl, String bgColor, String title, String center) {
         this.itemType = itemType;
         this.spanSize = spanSize;
         this.imgUrl = imgUrl;
-        this.bgColor = bgColor;
         this.title = title;
+        this.bgColor = bgColor;
         this.center = center;
     }
 
+    public HomeCenterItem(int itemType, int spanSize, String imgUrl, String title) {
+        this.itemType = itemType;
+        this.spanSize = spanSize;
+        this.imgUrl = imgUrl;
+        this.title = title;
+    }
+
+    public HomeCenterItem(int itemType, int spanSize, String imgUrl, String title, String bgColor) {
+        this.itemType = itemType;
+        this.spanSize = spanSize;
+        this.imgUrl = imgUrl;
+        this.title = title;
+        this.bgColor = bgColor;
+    }
+
+    public HomeCenterItem(int itemType, int spanSize, int position, HomeContentBean.UnionItemData unionItemData, boolean topRounded, String bgColor) {
+        this.itemType = itemType;
+        this.spanSize = spanSize;
+        this.position = position;
+        this.imgUrl = unionItemData.getImg();
+        this.topRounded = topRounded;
+        this.bgColor = bgColor;
+    }
+
+    public HomeCenterItem(int itemType, int spanSize, int position, HomeContentBean.UnionClassifyData unionClassifyData, String bgColor, boolean topRounded, boolean bottomRounded) {
+        this.itemType = itemType;
+        this.spanSize = spanSize;
+        this.position = position;
+        this.imgUrl = unionClassifyData.getImg();
+        this.topRounded = topRounded;
+        this.bottomRounded = bottomRounded;
+        this.bgColor = bgColor;
+    }
     public HomeCenterItem(int itemType, int spanSize, String imgUrl, String bgColor, String title, String center, int position) {
         this.itemType = itemType;
         this.spanSize = spanSize;
@@ -182,6 +241,22 @@ public class HomeCenterItem extends MyMultiItemEntity {
 
     public void setBottomRounded(boolean bottomRounded) {
         this.bottomRounded = bottomRounded;
+    }
+
+    public String getData_1() {
+        return data_1;
+    }
+
+    public void setData_1(String data_1) {
+        this.data_1 = data_1;
+    }
+
+    public String getData_2() {
+        return data_2;
+    }
+
+    public void setData_2(String data_2) {
+        this.data_2 = data_2;
     }
 
     @Override

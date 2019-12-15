@@ -52,8 +52,7 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
     public HomeContentAdapter(Context context, List<HomeCenterItem> data, int typeCount) {
         super(data, typeCount);
         glideUtils = new GlideUtils(context);
-        //screenWidth = ImageUtil.getScreenWidth(context);
-        screenWidth = 0;
+        screenWidth = ImageUtil.getScreenWidth(context);
         dp_6 = ImageUtil.dip2px(context, 6);
         dp_4 = ImageUtil.dip2px(context, 4);
         dp_8 = ImageUtil.dip2px(context, 8);
@@ -673,11 +672,11 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
 
     private OnChangeStatusBarBg onChangeStatusBarBg;
 
-    interface OnChangeStatusBarBg {
+    public interface OnChangeStatusBarBg {
         void changeStatusBarBg(String bgColor);
     }
 
-    void setOnChangeStatusBarBg(OnChangeStatusBarBg onChangeStatusBarBg) {
+    public void setOnChangeStatusBarBg(OnChangeStatusBarBg onChangeStatusBarBg) {
         this.onChangeStatusBarBg = onChangeStatusBarBg;
     }
 

@@ -29,8 +29,6 @@ public class GlideUtils {
         if (transformations.length > 0) {
             GlideApp.with(mContext)
                     .load(url)
-                    .skipMemoryCache(true)//禁用内存缓存
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)//进入硬盘缓存
                     //.transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
                     //.error(R.mipmap.image_loading)    //错误加载
                     //.placeholder(R.mipmap.image_loading)   //加载图
@@ -39,8 +37,6 @@ public class GlideUtils {
         } else {
             GlideApp.with(mContext)
                     .load(url)
-                    .skipMemoryCache(true)//禁用内存缓存
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)//进入硬盘缓存
                     //.transition(DrawableTransitionOptions.withCrossFade())//淡入淡出
                     //.error(R.mipmap.image_loading)    //错误加载
                     //.placeholder(R.mipmap.image_loading)   //加载图

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.bxs.bz.app.UI.Launcher.Fragment.ArcView
+        <com.hd.shopdemo.widget.ArcView
             android:id="@+id/arview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

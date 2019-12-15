@@ -1,118 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_home_root"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
-        android:background="@color/statusBgColor"
-        android:orientation="horizontal"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:layout_weight="1"
-            android:id="@+id/et_search_key_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_home_top_search"
-            android:drawableLeft="@mipmap/home_top_search"
-            android:drawablePadding="10dp"
-            android:hint="输入您要搜索的内容"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:paddingLeft="15dp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:textColorHint="@color/text_h3"
-            android:textSize="16sp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_marginLeft="5dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/home_nav_location" />
-
-            <TextView
-                android:layout_marginTop="2dp"
-                android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="加载中"
-                android:textColor="@color/white"
-                android:textSize="9sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginLeft="5dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/home_nav_er" />
-
-            <TextView
-                android:layout_marginTop="2dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="扫一扫"
-                android:textColor="@color/white"
-                android:textSize="9sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/ll_home_content"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.androidkun.xtablayout.XTabLayout
-                android:id="@+id/xtab_homeTab"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:isScrollContainer="false"
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
                 android:background="@color/statusBgColor"
-                app:xTabPaddingStart="0dp"
-                app:xTabPaddingEnd="0dp"
-                app:xTabMode="scrollable"
-                app:xTabSelectedTextColor="@color/white"
-                app:xTabSelectedTextSize="17sp"
-                app:xTabTextColor="@color/white"
-                app:xTabTextSelectedBold="true"
-                app:xTabTextSize="14sp" />
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/vp_home_content"
+                <EditText
+                    android:layout_weight="1"
+                    android:id="@+id/et_search_key_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_home_top_search"
+                    android:drawableLeft="@mipmap/home_top_search"
+                    android:drawablePadding="10dp"
+                    android:hint="输入您要搜索的内容"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:textColorHint="@color/text_h3"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/home_nav_location" />
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="加载中"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/home_nav_er" />
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="扫一扫"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_homecenter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
-    </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>
