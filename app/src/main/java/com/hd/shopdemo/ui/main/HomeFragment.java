@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -16,12 +18,15 @@ import com.hd.shopdemo.MainActivity;
 import com.hd.shopdemo.R;
 import com.hd.shopdemo.app.AppConfig;
 import com.hd.shopdemo.base.BaseFragment;
+import com.hd.shopdemo.bean.BaseBean;
 import com.hd.shopdemo.bean.CustomData;
-import com.hd.shopdemo.bean.HomeContentBean;
 import com.hd.shopdemo.ui.home.HomeCenterItem;
 import com.hd.shopdemo.ui.home.HomeContentAdapter;
+import com.hd.shopdemo.ui.home.bean.HomeBottomGoodsItemBean;
+import com.hd.shopdemo.ui.home.bean.HomeCenterItemBean;
 import com.hd.shopdemo.utils.LogUtil;
 import com.hd.shopdemo.utils.TextUtil;
+import com.hd.shopdemo.utils.retrofit_utils.RetrofitUtil;
 import com.hd.shopdemo.utils.status_bar_utils.StatusBarUtil;
 import com.ms.banner.Banner;
 
@@ -30,11 +35,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+/**
+ * 首页
+ */
 public class HomeFragment extends BaseFragment {
 
     @BindView(R.id.ll_home_root)
     LinearLayout ll_home_root;
+    @BindView(R.id.ll_nav)
+    LinearLayout ll_nav;
     @BindView(R.id.rcv_homecenter)
     RecyclerView rcv_homecenter;
     @BindView(R.id.swipeLayout)
@@ -42,6 +55,7 @@ public class HomeFragment extends BaseFragment {
 
     HomeContentAdapter homeContentAdapter;
     GridLayoutManager gridLayoutManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_home, null);
@@ -63,14 +77,17 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.getmPrevious() == 0)
+        if (MainActivity.getmPrevious() == 0) {
             StatusBarUtil.immersive(mActivity, statusBarBgColor);
+            ll_nav.setBackgroundColor(statusBarBgColor);
+        }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
             StatusBarUtil.immersive(mActivity, statusBarBgColor);
+            ll_nav.setBackgroundColor(statusBarBgColor);
         } else {
 
         }
@@ -85,8 +102,9 @@ public class HomeFragment extends BaseFragment {
         rcv_homecenter.setLayoutManager(gridLayoutManager);
         homeContentAdapter.setOnChangeStatusBarBg(new HomeContentAdapter.OnChangeStatusBarBg() {
             @Override
-            public void changeStatusBarBg(String bgColor) {
-                //onChangeStatusBarBg.changeStatusBarBg(bgColor);
+            public void changeStatusBarBg(int bgColor) {
+                ll_nav.setBackgroundColor(bgColor);
+                StatusBarUtil.immersive(mActivity, bgColor);
             }
         });
 
@@ -98,9 +116,9 @@ public class HomeFragment extends BaseFragment {
                 int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
                 LogUtil.i("滑动事件监听：" + firstVisibleItemPosition);
                 if (firstVisibleItemPosition == 0) {
-                    // playBanner(true);
+                    playBanner(true);
                 } else {
-                    // playBanner(false);
+                    playBanner(false);
                 }
             }
         });
@@ -108,14 +126,14 @@ public class HomeFragment extends BaseFragment {
         homeContentAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                //loadHomeBottomShopList(tid, bottomShopPage);
+                loadHomeBottomGoodsList();
             }
         }, rcv_homecenter);
         swipeLayout.setColorSchemeColors(StatusBarUtil.getStatusBarBg(mActivity));
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshData();
+                initDatas();
             }
         });
         swipeLayout.setRefreshing(true);
@@ -140,70 +158,57 @@ public class HomeFragment extends BaseFragment {
         }, 100);
     }
 
-    private String img1 = AppConfig.websocketUIR + "/public/images/image_001.jpg";
+
+    public void playBanner(boolean play) {
+        if (homeBanner != null && gridLayoutManager != null) {
+            if (play && !homeBanner.isStart()) {
+                if (gridLayoutManager.findFirstVisibleItemPosition() == 0) {
+                    LogUtil.i("首页banner：成功播放Banner");
+                    homeBanner.startAutoPlay();
+                }
+            } else if (!play && homeBanner.isStart()) {
+                LogUtil.i("首页banner：成功暂停Banner");
+                homeBanner.stopAutoPlay();
+            }
+        } else
+            LogUtil.i("首页banner：已经是个空的了：播放：" + play);
+    }
+
+    public void releaseBanner() {
+        if (homeBanner != null) {
+            LogUtil.i("首页banner  ：成功释放Banner" + homeBanner);
+            homeBanner.stopAutoPlay();
+            homeBanner.releaseBanner();
+            homeBanner = null;
+        } else
+            LogUtil.i("首页banner  ：已经是个空的了");
+    }
+
+
+    private String img1 = AppConfig.APP_SERVER_ADDRESS + "/public/images/image_001.jpg";
 
     @Override
     protected void initDatas() {
-        refreshData();
+        loadHomeCenterData();
+        //refreshData();
+        page = 1;
+        loadHomeBottomGoodsList();
     }
 
-    private void refreshData() {
-        List<HomeContentBean.BannerData> bannerDataList = new ArrayList<>();
-        for (int i = 0; i < 3; i++)
-            bannerDataList.add(new HomeContentBean.BannerData(img1, "#483861", 0, 0, 0));
 
-        List<HomeContentBean.ClassifyData> classifyDataList = new ArrayList<>();
-        for (int i = 0; i < 4; i++)
-            classifyDataList.add(new HomeContentBean.ClassifyData(img1, "标题" + i, 0, 0, 0));
-
-        String unionTitleImg = img1;
-        String unionTitleBgColor = "#53aa76";
-        List<HomeContentBean.UnionClassifyData> unionClassifyDataList = new ArrayList<>();
-        for (int i = 0; i < 3; i++)
-            unionClassifyDataList.add(new HomeContentBean.UnionClassifyData(img1, "标题" + i, 0, 0, 0));
-
-        List<HomeContentBean.UnionItemData> unionItemDataList = new ArrayList<>();
-        for (int i = 0; i < 3; i++)
-            unionItemDataList.add(new HomeContentBean.UnionItemData(img1, "标题" + i, 0, 0, 0));
-
-        String singleItem_1_TitleImg = img1;
-        List<HomeContentBean.SingleItem_1_Data> singleItem_1_DataList = new ArrayList<>();
-        for (int i = 0; i < 3; i++)
-            singleItem_1_DataList.add(new HomeContentBean.SingleItem_1_Data(img1, "标题" + i, 0, 0, 0));
-
-        String singleItem_2_TitleImg = img1;
-        List<HomeContentBean.SingleItem_2_Data> singleItem_2_DataList = new ArrayList<>();
-        for (int i = 0; i < 2; i++)
-            singleItem_2_DataList.add(new HomeContentBean.SingleItem_2_Data(img1, "标题" + i, 0, 0, 0));
-
-        HomeContentBean homeContentBean = new HomeContentBean();
-        homeContentBean.setBannerDataList(bannerDataList);
-        homeContentBean.setClassifyDataList(classifyDataList);
-        homeContentBean.setUnionTitleImg(unionTitleImg);
-        homeContentBean.setUnionTitleBgColor(unionTitleBgColor);
-        homeContentBean.setUnionClassifyDataList(unionClassifyDataList);
-        homeContentBean.setUnionItemDataList(unionItemDataList);
-        homeContentBean.setSingleItem_1_TitleImg(singleItem_1_TitleImg);
-        homeContentBean.setSingleItem_1_DataList(singleItem_1_DataList);
-        homeContentBean.setSingleItem_2_TitleImg(singleItem_2_TitleImg);
-        homeContentBean.setSingleItem_2_DataList(singleItem_2_DataList);
-
-        setAdapterData(homeContentBean);
-    }
-
-    public void setAdapterData(HomeContentBean homeContentBean) {
+    public void setAdapterData(HomeCenterItemBean homeContentBean) {
         //添加Banner
-        List<HomeContentBean.BannerData> bannerDataList = homeContentBean.getBannerDataList();
+        List<HomeCenterItemBean.BannerDataListBean> bannerDataList = homeContentBean.getBannerDataList();
         String jsonStr = new Gson().toJson(homeContentBean);
-        LogUtil.i(jsonStr);
+        LogUtil.i("打印数据：" + jsonStr);
         List<CustomData> homeBannerList = new ArrayList<>();
         for (int i = 0; i < bannerDataList.size(); i++) {
-            HomeContentBean.BannerData bannerData = bannerDataList.get(i);
-            String img = bannerData.getImg();
+            HomeCenterItemBean.BannerDataListBean bannerData = bannerDataList.get(i);
+            String img = bannerData.getS_img();
             String backColor = bannerData.getBgColor();
             String type = "" + bannerData.getType();
-            String gid = "" + bannerData.getGid();
-            String sid = "" + bannerData.getSid();
+            String gid = "" + bannerData.getG_id();
+            String sid = "" + bannerData.getS_id();
             homeBannerList.add(new CustomData(img, "", backColor, false, type, gid, sid, ""));
         }
         List<HomeCenterItem> swepBannerDataList = new ArrayList<>();
@@ -211,23 +216,23 @@ public class HomeFragment extends BaseFragment {
         homeContentAdapter.setCenterDataItem(HomeCenterItem.HOMECENTER_HOME_BANNER, swepBannerDataList);
 
         //添加分类
-        List<HomeContentBean.ClassifyData> classifyDataList = homeContentBean.getClassifyDataList();
+        List<HomeCenterItemBean.ClassifyDataListBean> classifyDataList = homeContentBean.getClassifyDataList();
         List<HomeCenterItem> swepClassifyItemList = new ArrayList<>();
         for (int i = 0; i < classifyDataList.size(); i++) {
-            HomeContentBean.ClassifyData classifyData = classifyDataList.get(i);
-            String imgUrl = classifyData.getImg();
-            String title = classifyData.getTitle();
+            HomeCenterItemBean.ClassifyDataListBean classifyData = classifyDataList.get(i);
+            String imgUrl = classifyData.getS_img();
+            String title = classifyData.getS_title();
             HomeCenterItem homeCenterItem = new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_CLASSIFY, 2, imgUrl, title);
-            homeCenterItem.setData_1("" + classifyData.getGid());
-            homeCenterItem.setData_2("" + classifyData.getSid());
+            homeCenterItem.setData_1("" + classifyData.getG_id());
+            homeCenterItem.setData_2("" + classifyData.getS_id());
             swepClassifyItemList.add(homeCenterItem);
         }
         homeContentAdapter.setCenterDataItem(HomeCenterItem.HOMECENTER_HOME_CLASSIFY, swepClassifyItemList);
 
         String unionTitleImg = homeContentBean.getUnionTitleImg();
         String unionTitleBgColor = homeContentBean.getUnionTitleBgColor();
-        List<HomeContentBean.UnionClassifyData> unionClassifyDataList = homeContentBean.getUnionClassifyDataList();
-        List<HomeContentBean.UnionItemData> unionItemDataList = homeContentBean.getUnionItemDataList();
+        List<HomeCenterItemBean.UnionClassifyDataListBean> unionClassifyDataList = homeContentBean.getUnionClassifyDataList();
+        List<HomeCenterItemBean.UnionItemDataListBean> unionItemDataList = homeContentBean.getUnionItemDataList();
 
         boolean topRounded_Classify = true;
         boolean topRounded_Item = true;
@@ -250,9 +255,9 @@ public class HomeFragment extends BaseFragment {
                 bottomRounded = false;
             }
             if ((unionClassifyDataList.size() % 2) == 1)//如果是单数，最后要补上一个
-                unionClassifyDataList.add(new HomeContentBean.UnionClassifyData());
+                unionClassifyDataList.add(new HomeCenterItemBean.UnionClassifyDataListBean());
             for (int i = 0; i < unionClassifyDataList.size(); i++) {
-                HomeContentBean.UnionClassifyData unionClassifyData = unionClassifyDataList.get(i);
+                HomeCenterItemBean.UnionClassifyDataListBean unionClassifyData = unionClassifyDataList.get(i);
                 if (unionClassifyDataList.size() <= 2) {//如果总共就两个，那么上下都需要考虑直角
                     swepUnionClassifyDataList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_UNION_CLASSIFY, 5, i, unionClassifyData, unionTitleBgColor, topRounded_Classify, bottomRounded));
                 } else if (i == 0 || i == 1) {//否则的话顶部考虑直角
@@ -278,7 +283,7 @@ public class HomeFragment extends BaseFragment {
 
         //单列信息一
         String singleItem_1_TitleImg = homeContentBean.getSingleItem_1_TitleImg();
-        List<HomeContentBean.SingleItem_1_Data> singleItem_1_DataList = homeContentBean.getSingleItem_1_DataList();
+        List<HomeCenterItemBean.SingleItem1DataListBean> singleItem_1_DataList = homeContentBean.getSingleItem_1_dataList();
         List<HomeCenterItem> swepSingleItem_1_List = new ArrayList<>();
         if (singleItem_1_DataList != null && singleItem_1_DataList.size() > 0) {
             swepSingleItem_1_List.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_SINGLE_TITLE, 10, singleItem_1_TitleImg, ""));
@@ -289,7 +294,7 @@ public class HomeFragment extends BaseFragment {
 
         //单列信息二
         String singleItem_2_TitleImg = homeContentBean.getSingleItem_2_TitleImg();
-        List<HomeContentBean.SingleItem_2_Data> singleItem_2_DataList = homeContentBean.getSingleItem_2_DataList();
+        List<HomeCenterItemBean.SingleItem2DataListBean> singleItem_2_DataList = homeContentBean.getSingleItem_2_dataList();
         List<HomeCenterItem> swepSingleItem_2_List = new ArrayList<>();
         if (singleItem_2_DataList != null && singleItem_2_DataList.size() > 0) {
             swepSingleItem_2_List.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_SINGLE_TITLE, 10, singleItem_2_TitleImg, ""));
@@ -300,4 +305,104 @@ public class HomeFragment extends BaseFragment {
 
         stopRefresh();
     }
+
+    private int page = 1;
+    private static int GOODS_MAX_ROWS = 20;
+    private int bottomGoodsCount = 0;
+
+    private boolean bottomGoodsLoading = false;
+
+    private void loadHomeBottomGoodsList() {
+        if (bottomGoodsLoading)
+            return;
+        bottomGoodsLoading = true;
+
+        RetrofitUtil.getInstance().getHomeBottomGoodsItemBean("" + page, "" + GOODS_MAX_ROWS, new Callback<BaseBean<HomeBottomGoodsItemBean>>() {
+            @Override
+            public void onResponse(@Nullable Call<BaseBean<HomeBottomGoodsItemBean>> call, @Nullable Response<BaseBean<HomeBottomGoodsItemBean>> response) {
+                LogUtil.i("首页底部商品数据   req：" + new Gson().toJson(response));
+                if (response != null) {
+                    BaseBean<HomeBottomGoodsItemBean> bean = response.body();
+                    if (bean != null) {
+                        if (bean.getCode() == 200) {
+                            LogUtil.i("打印下标  page=" + page);
+                            if (page == 1) {
+                                bottomGoodsCount = 0;
+                                List<HomeCenterItem> homeCenterItemList = new ArrayList<>();
+                                homeCenterItemList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_DOUBLE_TITLE, 10, bean.getData().getItemHeadImg(), ""));
+                                for (HomeBottomGoodsItemBean.ItemsBean item : bean.getData().getItemList()) {
+                                    homeCenterItemList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_DOUBLE_ITEM, 5, bottomGoodsCount, item));
+                                    bottomGoodsCount++;
+                                }
+                                homeContentAdapter.setCenterDataItem(HomeCenterItem.HOMECENTER_HOME_DOUBLE_ITEM, homeCenterItemList);
+                                stopRefresh();
+                            } else {
+                                List<HomeCenterItem> homeCenterItemList = new ArrayList<>();
+                                for (HomeBottomGoodsItemBean.ItemsBean item : bean.getData().getItemList()) {
+                                    homeCenterItemList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_DOUBLE_ITEM, 5, bottomGoodsCount, item));
+                                    bottomGoodsCount++;
+                                }
+                                homeContentAdapter.addBottomDataIndex(HomeCenterItem.HOMECENTER_HOME_DOUBLE_ITEM, homeCenterItemList);
+                            }
+                            page++;
+                            if (bean.getData().getItemCount() < GOODS_MAX_ROWS)
+                                homeContentAdapter.loadMoreEnd();
+                            else
+                                homeContentAdapter.loadMoreComplete();
+                        } else {
+                            homeContentAdapter.loadMoreFail();
+                            Toast.makeText(mContext, bean.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else
+                        homeContentAdapter.loadMoreFail();
+                } else
+                    homeContentAdapter.loadMoreFail();
+                bottomGoodsLoading = false;
+            }
+
+            @Override
+            public void onFailure(@Nullable Call<BaseBean<HomeBottomGoodsItemBean>> call, @Nullable Throwable t) {
+                LogUtil.e("加载首页底部商品出现问题：" + t.toString());
+                homeContentAdapter.loadMoreFail();
+                bottomGoodsLoading = false;
+            }
+        });
+    }
+
+    private boolean homeCenterDataLoading = false;
+
+
+    private void loadHomeCenterData() {
+        if (homeCenterDataLoading)
+            return;
+        homeCenterDataLoading = true;
+
+        RetrofitUtil.getInstance().getHomeCenterItemBean(new Callback<BaseBean<HomeCenterItemBean>>() {
+            @Override
+            public void onResponse(@Nullable Call<BaseBean<HomeCenterItemBean>> call, @Nullable Response<BaseBean<HomeCenterItemBean>> response) {
+                LogUtil.i("首页内容数据   req：" + new Gson().toJson(response));
+                if (response != null) {
+                    BaseBean<HomeCenterItemBean> bean = response.body();
+                    if (bean != null) {
+                        if (bean.getCode() == 200) {
+                            setAdapterData(bean.getData());
+                        } else {
+                            Toast.makeText(mContext, bean.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                homeCenterDataLoading = false;
+                stopRefresh();
+            }
+
+            @Override
+            public void onFailure(@Nullable Call<BaseBean<HomeCenterItemBean>> call, @Nullable Throwable t) {
+                LogUtil.e("加载首页内容出现问题：" + t.toString());
+                homeCenterDataLoading = false;
+                stopRefresh();
+            }
+        });
+    }
+
+
 }

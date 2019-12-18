@@ -17,7 +17,7 @@ public class MyWebSocketClient extends WebSocketClient {
             if (myWebSocketClient == null) {
                 synchronized (MyWebSocketClient.class) {
                     if (myWebSocketClient == null) {
-                        return myWebSocketClient = new MyWebSocketClient(AppConfig.websocketUIR);
+                        return myWebSocketClient = new MyWebSocketClient(URI.create(AppConfig.APP_SERVER_ADDRESS));
                     } else
                         return myWebSocketClient;
                 }

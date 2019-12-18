@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 我的记录
+ * 我的
  */
 public class MineFragment extends BaseFragment {
 
@@ -98,9 +98,9 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    String imageURL_1 = AppConfig.ip + "/public/images/image_001.jpg";
-    String imageURL_2 = AppConfig.ip + "/public/images/image_002.jpg";
-    String imageURL_3 = AppConfig.ip + "/public/images/image_003.jpg";
+    String imageURL_1 = AppConfig.APP_SERVER_ADDRESS + "/public/images/image_001.jpg";
+    String imageURL_2 = AppConfig.APP_SERVER_ADDRESS + "/public/images/image_002.jpg";
+    String imageURL_3 = AppConfig.APP_SERVER_ADDRESS + "/public/images/image_003.jpg";
 
     @Override
     protected void initViews() {

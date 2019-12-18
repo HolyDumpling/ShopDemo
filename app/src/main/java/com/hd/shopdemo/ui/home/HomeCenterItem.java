@@ -1,14 +1,15 @@
 package com.hd.shopdemo.ui.home;
 
 import com.hd.shopdemo.bean.CustomData;
-import com.hd.shopdemo.bean.HomeContentBean;
+import com.hd.shopdemo.ui.home.bean.HomeBottomGoodsItemBean;
+import com.hd.shopdemo.ui.home.bean.HomeCenterItemBean;
 import com.hd.shopdemo.widget.my_brvah.MyMultiItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeCenterItem extends MyMultiItemEntity {
-    public static final int HOMECENTER_TYPE_COUNT = 13;//分类总数
+    public static final int HOMECENTER_TYPE_COUNT = 10;//分类总数
     public static final int HOMECENTER_HOME_BANNER = 0;//首页轮播
     public static final int HOMECENTER_HOME_CLASSIFY = 1;//首页五分类
     public static final int HOMECENTER_HOME_UNION_TITLE = 2;//首页联盟卡标题
@@ -19,10 +20,6 @@ public class HomeCenterItem extends MyMultiItemEntity {
     public static final int HOMECENTER_HOME_SINGLE_ITEM_2 = 7;//首页单列项(每日店推)
     public static final int HOMECENTER_HOME_DOUBLE_TITLE = 8;//首页双列项(底部商品)的标题
     public static final int HOMECENTER_HOME_DOUBLE_ITEM = 9;//首页双列项(底部商品)
-
-    public static final int HOMECENTER_APPENDIX_BANNER = 10;//附页轮播
-    public static final int HOMECENTER_APPENDIX_SINGLE_ITEM = 11;//附页单列项
-    public static final int HOMECENTER_APPENDIX_EMPTY = 12;//附页缺省页
 
     private int itemType;
     private int spanSize;
@@ -61,29 +58,23 @@ public class HomeCenterItem extends MyMultiItemEntity {
         this.itemType = itemType;
         this.spanSize = spanSize;
         this.bannerList = bannerList;
+        this.bgColor = "";
     }
 
-    public HomeCenterItem(int itemType, HomeContentBean.SingleItem_1_Data singleItem_1_data) {
+    public HomeCenterItem(int itemType, HomeCenterItemBean.SingleItem1DataListBean singleItem_1_data) {
         this.itemType = itemType;
         this.spanSize = 10;
-        this.imgUrl = singleItem_1_data.getImg();
-        this.title = singleItem_1_data.getTitle();
+        this.imgUrl = singleItem_1_data.getS_img();
+        this.title = singleItem_1_data.getS_title();
+        this.bgColor = "";
     }
 
-    public HomeCenterItem(int itemType, HomeContentBean.SingleItem_2_Data singleItem_2_data) {
+    public HomeCenterItem(int itemType, HomeCenterItemBean.SingleItem2DataListBean singleItem_2_data) {
         this.itemType = itemType;
         this.spanSize = 10;
-        this.imgUrl = singleItem_2_data.getImg();
-        this.title = singleItem_2_data.getTitle();
-    }
-
-    public HomeCenterItem(int itemType, int spanSize, String imgUrl, String bgColor, String title, String center) {
-        this.itemType = itemType;
-        this.spanSize = spanSize;
-        this.imgUrl = imgUrl;
-        this.title = title;
-        this.bgColor = bgColor;
-        this.center = center;
+        this.imgUrl = singleItem_2_data.getS_img();
+        this.title = singleItem_2_data.getS_title();
+        this.bgColor = "";
     }
 
     public HomeCenterItem(int itemType, int spanSize, String imgUrl, String title) {
@@ -91,6 +82,18 @@ public class HomeCenterItem extends MyMultiItemEntity {
         this.spanSize = spanSize;
         this.imgUrl = imgUrl;
         this.title = title;
+        this.bgColor = "";
+    }
+
+    public HomeCenterItem(int itemType, int spanSize, int position, HomeBottomGoodsItemBean.ItemsBean goods) {
+        this.itemType = itemType;
+        this.spanSize = spanSize;
+        this.position = position;
+        this.imgUrl = goods.getG_img();
+        this.title = goods.getG_title();
+        this.center = "" + goods.getG_price();
+        this.btText_1 = "" + goods.getG_sharePrice();
+        this.bgColor = "";
     }
 
     public HomeCenterItem(int itemType, int spanSize, String imgUrl, String title, String bgColor) {
@@ -101,32 +104,23 @@ public class HomeCenterItem extends MyMultiItemEntity {
         this.bgColor = bgColor;
     }
 
-    public HomeCenterItem(int itemType, int spanSize, int position, HomeContentBean.UnionItemData unionItemData, boolean topRounded, String bgColor) {
+    public HomeCenterItem(int itemType, int spanSize, int position, HomeCenterItemBean.UnionItemDataListBean unionItemData, boolean topRounded, String bgColor) {
         this.itemType = itemType;
         this.spanSize = spanSize;
         this.position = position;
-        this.imgUrl = unionItemData.getImg();
+        this.imgUrl = unionItemData.getS_img();
         this.topRounded = topRounded;
         this.bgColor = bgColor;
     }
 
-    public HomeCenterItem(int itemType, int spanSize, int position, HomeContentBean.UnionClassifyData unionClassifyData, String bgColor, boolean topRounded, boolean bottomRounded) {
+    public HomeCenterItem(int itemType, int spanSize, int position, HomeCenterItemBean.UnionClassifyDataListBean unionClassifyData, String bgColor, boolean topRounded, boolean bottomRounded) {
         this.itemType = itemType;
         this.spanSize = spanSize;
         this.position = position;
-        this.imgUrl = unionClassifyData.getImg();
+        this.imgUrl = unionClassifyData.getS_img();
         this.topRounded = topRounded;
         this.bottomRounded = bottomRounded;
         this.bgColor = bgColor;
-    }
-    public HomeCenterItem(int itemType, int spanSize, String imgUrl, String bgColor, String title, String center, int position) {
-        this.itemType = itemType;
-        this.spanSize = spanSize;
-        this.imgUrl = imgUrl;
-        this.bgColor = bgColor;
-        this.title = title;
-        this.center = center;
-        this.position = position;
     }
 
     public String getTitle() {

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
-    android:background="@drawable/bg_single_item_circular"
+    android:background="@drawable/bg_lmk_item_circular"
     android:id="@+id/onclick_item"
     android:orientation="vertical">
 

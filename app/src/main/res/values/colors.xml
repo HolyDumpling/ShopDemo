@@ -16,6 +16,9 @@
     <color name="text_emphasis">#FF3C3C</color>
     <color name="text_member">#f5c348</color>
 
+
+    <color name="classifyLeftSelected">#FF3C3C</color>
+
     <color name="submit_pay_stroke">#FF3C3C</color>
     <color name="submit_pay_bg">#FF3C3C</color>
     <color name="submit_pay_text">#ffffff</color>

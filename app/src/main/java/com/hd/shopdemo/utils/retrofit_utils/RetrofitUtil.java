@@ -2,7 +2,11 @@ package com.hd.shopdemo.utils.retrofit_utils;
 
 
 import com.hd.shopdemo.app.AppConfig;
+import com.hd.shopdemo.bean.BaseBean;
 import com.hd.shopdemo.bean.DataDemoBean;
+import com.hd.shopdemo.ui.home.bean.HomeBottomGoodsItemBean;
+import com.hd.shopdemo.ui.home.bean.HomeCenterItemBean;
+import com.hd.shopdemo.utils.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,10 +60,22 @@ public class RetrofitUtil {
         return retrofitUtil;
     }
 
+    public void getHomeBottomGoodsItemBean(String page, String rows, Callback<BaseBean<HomeBottomGoodsItemBean>> callback) {
+        LogUtil.i("首页底部商品   pams：" + page + "," + rows);
+        mApiServer.getHomeBottomGoodsItemBean(page, rows).enqueue(callback);
+    }
 
+    public void getHomeCenterItemBean(Callback<BaseBean<HomeCenterItemBean>> callback) {
+        LogUtil.i("首页内容   pams：");
+        mApiServer.getHomeCenterItemBean().enqueue(callback);
+    }
+
+
+    ////下面都是没用的
     public void getBuyproductProductlist(String uid, String longAlt, String pageIndex, String pageSize, String ptid, String cid, Callback<DataDemoBean> callback) {
         mApiServer.getBuyproductProductlist(uid, longAlt, pageIndex, pageSize, ptid, cid).enqueue(callback);
     }
+
 
     public void getBuyproductProductlist2(String uid, String longAlt, String pageIndex, String pageSize, String ptid, String cid, Callback<DataDemoBean> callback) {
         // 设置请求类型

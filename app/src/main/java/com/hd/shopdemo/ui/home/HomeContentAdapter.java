@@ -1,5 +1,6 @@
 package com.hd.shopdemo.ui.home;
 
+import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -71,9 +72,6 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
         addItemType(HomeCenterItem.HOMECENTER_HOME_SINGLE_ITEM_2, R.layout.item_homecenter_home_single_item2);
         addItemType(HomeCenterItem.HOMECENTER_HOME_DOUBLE_TITLE, R.layout.item_homecenter_home_double_title);
         addItemType(HomeCenterItem.HOMECENTER_HOME_DOUBLE_ITEM, R.layout.item_homecenter_home_double_item);
-        addItemType(HomeCenterItem.HOMECENTER_APPENDIX_BANNER, R.layout.item_homecenter_appendix_banner);
-        addItemType(HomeCenterItem.HOMECENTER_APPENDIX_SINGLE_ITEM, R.layout.item_homecenter_appendix_single_item);
-        addItemType(HomeCenterItem.HOMECENTER_APPENDIX_EMPTY, R.layout.item_homecenter_appendix_empty);
         setSpanSizeLookup(new SpanSizeLookup() {
             @Override
             public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
@@ -115,44 +113,10 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
             case HomeCenterItem.HOMECENTER_HOME_DOUBLE_ITEM:
                 initHomeDoubleItem_View(helper, item);
                 break;
-            case HomeCenterItem.HOMECENTER_APPENDIX_BANNER:
-                initAppendixBannerItemView(helper, item);
-                break;
-            case HomeCenterItem.HOMECENTER_APPENDIX_SINGLE_ITEM:
-                initAppendixSingleItemItemView(helper, item);
-                break;
             default:
                 LogUtil.i("出现了莫名其妙的选项:" + helper.getItemViewType());
                 break;
         }
-    }
-
-    private void initAppendixSingleItemItemView(BaseViewHolder helper, HomeCenterItem item) {
-
-        helper.setText(R.id.tv_title, item.getTitle() + "");
-        helper.setText(R.id.tv_juli, item.getCenter() + "");
-        /*图-尺寸*/
-        final ImageView imageView = helper.getView(R.id.iv_img);
-        int w = screenWidth - dp_30;
-        int h = (int) (w * 1.0 / 2.15);
-        LogUtil.i("附加页商店 --高：" + h + "--宽：" + w + "，URL：" + item.getImgUrl());
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) imageView.getLayoutParams();
-        lp.width = w;
-        lp.height = h;
-        imageView.setLayoutParams(lp);
-
-        glideUtils.intoImage(item.getImgUrl(), imageView,
-                new RoundTransform(5, RoundTransform.CORNER_TOP, true));
-
-        int isShow = item.getStatus();
-        if (isShow == 1) {
-            helper.getView(R.id.tv_maidan).setVisibility(View.VISIBLE);
-        } else {
-            helper.getView(R.id.tv_maidan).setVisibility(View.GONE);
-        }
-        //加载图
-        helper.addOnClickListener(R.id.onclick_item);
-        helper.addOnClickListener(R.id.tv_maidan);
     }
 
 
@@ -293,16 +257,15 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
 
     //单列项标题
     private void initHomeSingleTitleItemView(BaseViewHolder helper, HomeCenterItem item) {
-        ImageView tv_single_title_img = helper.getView(R.id.tv_single_title_img);
+        ImageView iv_single_title_img = helper.getView(R.id.iv_single_title_img);
         int w = screenWidth - dp_30;
         int h = (int) (w * 1.0 / 9.4);
         LogUtil.i("--高：" + h + "--宽：" + w);
-        LinearLayout.LayoutParams lp_tv_single_title_img = (LinearLayout.LayoutParams) tv_single_title_img.getLayoutParams();
-        lp_tv_single_title_img.width = w;
-        lp_tv_single_title_img.height = h;
-        tv_single_title_img.setLayoutParams(lp_tv_single_title_img);
-        glideUtils.intoImage(item.getImgUrl(), tv_single_title_img);
-
+        LinearLayout.LayoutParams lp_iv_single_title_img = (LinearLayout.LayoutParams) iv_single_title_img.getLayoutParams();
+        lp_iv_single_title_img.width = w;
+        lp_iv_single_title_img.height = h;
+        iv_single_title_img.setLayoutParams(lp_iv_single_title_img);
+        glideUtils.intoImage(item.getImgUrl(), iv_single_title_img);
     }
 
     //联盟卡分类
@@ -496,14 +459,59 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
         final List<ImageView> bannerIndicatorImages = new ArrayList<>();
         banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int bannerLastPosition = 0;
+            private int bannerLastColor = -1;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                LogUtil.i("Banner 改变页面：onPageScrolled " + position + "，" + +positionOffset + "，" + +positionOffsetPixels);
+
+                if (bannerList == null || bannerList.size() == 0)
+                    return;
+                int lastPos = (bannerLastPosition + bannerList.size()) % bannerList.size();
+                if (lastPos < bannerIndicatorImages.size())
+                    bannerIndicatorImages.get(lastPos).setImageResource(R.mipmap.home_btn_banner_nor);
+                int thisPos = (position + bannerList.size()) % bannerList.size();
+                if (thisPos < bannerIndicatorImages.size())
+                    bannerIndicatorImages.get(thisPos).setImageResource(R.mipmap.home_btn_banner_sel);
+                bannerLastPosition = position;
+                String bgColor = bannerList.get(position).getBackColor();
+                if (TextUtil.isEmpty(bgColor))
+                    bgColor = AppConfig.topColor;
+                item.setBgColor(bgColor);
+
+                if (onChangeStatusBarBg != null) {
+                    if (bannerLastColor == -1)
+                        bannerLastColor = Color.parseColor(AppConfig.topColor);
+                    ArgbEvaluator argbEvaluator = new ArgbEvaluator();//渐变色计算类
+                    int currentLastColor = (int) (argbEvaluator.evaluate(positionOffset, bannerLastColor, Color.parseColor(bgColor)));
+                    LogUtil.i("改变颜色 Down： " + position + "，" + Color.parseColor(bgColor));
+                    LogUtil.i("Banner 改变颜色   " + position + "，" + positionOffset + "，" + +bannerLastColor + "，" + +Color.parseColor(bgColor) + "，" + currentLastColor);
+                    arview.setAppBackColor(currentLastColor);
+                    arview.setVisibility(View.GONE);
+                    arview.setVisibility(View.VISIBLE);
+                    //positionOffset:表示渐变度，取0.0F-1.0F之间某一值
+                    //PAGE_COLOR_ONE:表示起始颜色值
+                    //PAGE_COLOR_TWO:表示最终颜色值
+                    onChangeStatusBarBg.changeStatusBarBg(currentLastColor);
+                }
+                if (positionOffset == 0) {
+                    String lastColorStr;
+                    if (position == 0)
+                        lastColorStr = bannerList.get(bannerList.size() - 1).getBackColor();
+                    else
+                        lastColorStr = bannerList.get(position - 1).getBackColor();
+                    if (TextUtil.isEmpty(lastColorStr))
+                        lastColorStr = AppConfig.topColor;
+                    bannerLastColor = Color.parseColor(lastColorStr);
+                    LogUtil.i("改变颜色 UP： " + position + "，" + bannerLastColor);
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
+                LogUtil.i("Banner 改变页面：onPageSelected " + position);
                 //页面移动到顶部，就位后调用
+                /*
                 if (bannerList == null || bannerList.size() == 0)
                     return;
                 int lastPos = (bannerLastPosition + bannerList.size()) % bannerList.size();
@@ -523,6 +531,7 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
 
                 if (onChangeStatusBarBg != null)
                     onChangeStatusBarBg.changeStatusBarBg(bgColor);
+                */
             }
 
             @Override
@@ -580,84 +589,6 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
         helper.addOnClickListener(R.id.onclick_item);
     }
 
-    //附加页轮播
-    private void initAppendixBannerItemView(BaseViewHolder helper, final HomeCenterItem item) {
-        Banner banner = helper.getView(R.id.banner);
-        LinearLayout indicator = helper.getView(R.id.indicator);
-        indicator.removeAllViews();
-
-        int banner_height = (int) ((screenWidth - dp_30) * 10.0 / 23.0);
-        RelativeLayout.LayoutParams banner_lp = (RelativeLayout.LayoutParams) banner.getLayoutParams();
-        banner_lp.height = banner_height;
-        banner_lp.width = screenWidth;
-        banner.setLayoutParams(banner_lp);
-
-        final List<CustomData> bannerList = item.getBannerList();
-        final List<ImageView> bannerIndicatorImages = new ArrayList<>();
-
-        banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private int bannerLastPosition = 0;
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                //页面移动到顶部，就位后调用
-                LogUtil.i("Banner 改变页面：onPageSelected " + position);
-                if (bannerList == null || bannerList.size() == 0)
-                    return;
-                int lastPos = (bannerLastPosition + bannerList.size()) % bannerList.size();
-                if (lastPos < bannerIndicatorImages.size())
-                    bannerIndicatorImages.get(lastPos).setImageResource(R.mipmap.home_btn_banner_nor);
-                int thisPos = (position + bannerList.size()) % bannerList.size();
-                if (thisPos < bannerIndicatorImages.size())
-                    bannerIndicatorImages.get(thisPos).setImageResource(R.mipmap.home_btn_banner_sel);
-                bannerLastPosition = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                //页面滑动状态，0开始滑动，1滑动中，2结束滑动
-                LogUtil.i("Banner 改变页面：onPageScrollStateChanged " + state);
-            }
-        });
-        LogUtil.i("首页轮播数据，啊共有" + bannerIndicatorImages.size() + "个白条," + bannerList.size() + "，个图片");
-
-        for (int i = 0; i < bannerList.size(); i++) {
-            ImageView imageView = new ImageView(mContext);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            LinearLayout.LayoutParams custom_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            custom_params.leftMargin = 8;
-            custom_params.rightMargin = 8;
-            if (i == 0) {
-                imageView.setImageResource(R.mipmap.home_btn_banner_sel);
-            } else {
-                imageView.setImageResource(R.mipmap.home_btn_banner_nor);
-            }
-            bannerIndicatorImages.add(imageView);
-            indicator.addView(imageView, custom_params);
-        }
-        LogUtil.i("首页轮播数据，吧共有" + bannerIndicatorImages.size() + "个白条," + bannerList.size() + "，个图片");
-
-
-        banner.setOnBannerClickListener(new OnBannerClickListener() {
-            @Override
-            public void onBannerClick(List datas, int position) {
-                onAdapterActionListener.clickBanner(item.getBannerList().get(position));
-            }
-        });
-
-        banner.setAutoPlay(true)
-                .setPages(bannerList, new CustomViewHolder(glideUtils))
-                //.setDelayTime(1000)
-                .setDelayTime(5000)
-                .setBannerStyle(com.ms.banner.BannerConfig.NOT_INDICATOR)
-                .setBannerAnimation(com.ms.banner.Transformer.Default)
-                .start();
-    }
-
 
     private OnAdapterActionListener onAdapterActionListener;
 
@@ -673,7 +604,7 @@ public class HomeContentAdapter extends MyBaseMultiItemQuickAdapter<HomeCenterIt
     private OnChangeStatusBarBg onChangeStatusBarBg;
 
     public interface OnChangeStatusBarBg {
-        void changeStatusBarBg(String bgColor);
+        void changeStatusBarBg(int bgColor);
     }
 
     public void setOnChangeStatusBarBg(OnChangeStatusBarBg onChangeStatusBarBg) {

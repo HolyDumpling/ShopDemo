@@ -17,6 +17,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/ll_nav"
                 android:gravity="center_vertical"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
@@ -27,25 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:layout_weight="1"
-                    android:id="@+id/et_search_key_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_home_top_search"
-                    android:drawableLeft="@mipmap/home_top_search"
-                    android:drawablePadding="10dp"
-                    android:hint="输入您要搜索的内容"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
-                    android:textColorHint="@color/text_h3"
-                    android:textSize="16sp" />
-
                 <LinearLayout
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
@@ -67,6 +51,23 @@
                         android:textColor="@color/white"
                         android:textSize="9sp" />
                 </LinearLayout>
+                <EditText
+                    android:layout_weight="1"
+                    android:id="@+id/et_search_key_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_home_top_search"
+                    android:drawableLeft="@mipmap/home_top_search"
+                    android:drawablePadding="10dp"
+                    android:hint="输入您要搜索的内容"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:textColorHint="@color/text_h3"
+                    android:textSize="16sp" />
+
 
                 <LinearLayout
                     android:layout_marginLeft="5dp"
@@ -87,6 +88,29 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="扫一扫"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/home_nav_message" />
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="消息"
                         android:textColor="@color/white"
                         android:textSize="9sp" />
                 </LinearLayout>

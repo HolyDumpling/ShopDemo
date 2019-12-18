@@ -2,14 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_exercise"
+        android:id="@+id/navigation_home"
         android:icon="@mipmap/tab_home"
         android:title="首页" />
 
     <item
+        android:id="@+id/navigation_classify"
+        android:icon="@mipmap/tab_cart"
+        android:title="分类" />
+    <item
         android:id="@+id/navigation_exam"
         android:icon="@mipmap/tab_cart"
-        android:title="发现好物" />
+        android:title="发现" />
 
     <item
         android:id="@+id/navigation_cart"

@@ -91,7 +91,11 @@ public abstract class MyBaseMultiItemQuickAdapter<T extends MyMultiItemEntity, K
         }
     }
 
-    public void addBottomDataIndex(int type, int size) {
-        indexs[type][1] += size;
+    public void addBottomDataIndex(int type, List<T> bottomDataItemList) {
+        int pos = getData().size();
+        int count = bottomDataItemList.size();
+        indexs[type][1] += count;
+        getData().addAll(bottomDataItemList);
+        notifyItemRangeInserted(pos, count);
     }
 }
