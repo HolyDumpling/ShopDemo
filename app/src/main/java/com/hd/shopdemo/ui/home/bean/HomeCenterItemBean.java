@@ -22,12 +22,21 @@ public class HomeCenterItemBean {
     private String singleItem_2_TitleImg;
     private String unionTitleBgColor;
     private String unionTitleImg;
+    private String goods_head;
     private List<ClassifyDataListBean> classifyDataList;
     private List<SingleItem1DataListBean> singleItem_1_dataList;
     private List<SingleItem2DataListBean> singleItem_2_dataList;
     private List<UnionClassifyDataListBean> unionClassifyDataList;
     private List<UnionItemDataListBean> unionItemDataList;
     private List<BannerDataListBean> bannerDataList;
+
+    public String getGoods_head() {
+        return goods_head;
+    }
+
+    public void setGoods_head(String goods_head) {
+        this.goods_head = goods_head;
+    }
 
     public String getSingleItem_1_TitleImg() {
         return singleItem_1_TitleImg;

@@ -49,10 +49,13 @@ public class ClassifyFragment extends BaseFragment {
         return rootView;
     }
 
+    private int statusBarBgColor;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         StatusBarUtil.setPaddingSmart(mActivity, ll_nav);
+        statusBarBgColor = StatusBarUtil.getStatusBarBg(mActivity);
         initViews();
         initDatas();
     }
@@ -60,7 +63,8 @@ public class ClassifyFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.getmPrevious() == 3) {
+        if (MainActivity.getmPrevious() == 1) {
+            StatusBarUtil.immersive(mActivity, statusBarBgColor, 0);
             initDatas();
         }
     }
@@ -68,6 +72,7 @@ public class ClassifyFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
+            StatusBarUtil.immersive(mActivity, statusBarBgColor, 0);
             initDatas();
         }
     }
@@ -132,6 +137,7 @@ public class ClassifyFragment extends BaseFragment {
                 classifyLeftItemList.add(new ClassifyLeftItem(i, "分类（" + i + "）", false));
             classifyLeftAdapter.notifyItemInserted(classifyLeftItemList.size() - 1);
         }
+        left_selectPos = 0;
         loadClassifyRightList(classifyLeftItemList.get(0).getC_id());
     }
 

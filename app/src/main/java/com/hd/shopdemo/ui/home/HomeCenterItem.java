@@ -3,23 +3,26 @@ package com.hd.shopdemo.ui.home;
 import com.hd.shopdemo.bean.CustomData;
 import com.hd.shopdemo.ui.home.bean.HomeBottomGoodsItemBean;
 import com.hd.shopdemo.ui.home.bean.HomeCenterItemBean;
+import com.hd.shopdemo.utils.LogUtil;
 import com.hd.shopdemo.widget.my_brvah.MyMultiItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeCenterItem extends MyMultiItemEntity {
-    public static final int HOMECENTER_TYPE_COUNT = 10;//分类总数
-    public static final int HOMECENTER_HOME_BANNER = 0;//首页轮播
-    public static final int HOMECENTER_HOME_CLASSIFY = 1;//首页五分类
-    public static final int HOMECENTER_HOME_UNION_TITLE = 2;//首页联盟卡标题
-    public static final int HOMECENTER_HOME_UNION_CLASSIFY = 3;//首页联盟卡田字格
-    public static final int HOMECENTER_HOME_UNION_ITEM = 4;//首页联盟卡套餐
-    public static final int HOMECENTER_HOME_SINGLE_TITLE = 5;//首页单列项(限时爆款、每日店推)的标题
-    public static final int HOMECENTER_HOME_SINGLE_ITEM_1 = 6;//首页单列项(限时爆款)
-    public static final int HOMECENTER_HOME_SINGLE_ITEM_2 = 7;//首页单列项(每日店推)
-    public static final int HOMECENTER_HOME_DOUBLE_TITLE = 8;//首页双列项(底部商品)的标题
-    public static final int HOMECENTER_HOME_DOUBLE_ITEM = 9;//首页双列项(底部商品)
+    public static final int HOMECENTER_TYPE_COUNT = 11;//分类总数
+    public static final int HOMECENTER_HOME_TOP_PLACEHOLDER = 0;//首页顶部占位
+    public static final int HOMECENTER_HOME_BANNER = 1;//首页轮播
+    public static final int HOMECENTER_HOME_CLASSIFY = 2;//首页五分类
+    public static final int HOMECENTER_HOME_UNION_TITLE = 3;//首页联盟卡标题
+    public static final int HOMECENTER_HOME_UNION_CLASSIFY = 4;//首页联盟卡田字格
+    public static final int HOMECENTER_HOME_UNION_ITEM = 5;//首页联盟卡套餐
+    public static final int HOMECENTER_HOME_SINGLE_TITLE = 6;//首页单列项(限时爆款、每日店推)的标题
+    public static final int HOMECENTER_HOME_SINGLE_ITEM_1 = 7;//首页单列项(限时爆款)
+    public static final int HOMECENTER_HOME_SINGLE_ITEM_2 = 8;//首页单列项(每日店推)
+    public static final int HOMECENTER_HOME_DOUBLE_TITLE = 9;//首页双列项(底部商品)的标题
+    public static final int HOMECENTER_HOME_DOUBLE_ITEM = 10;//首页双列项(底部商品)
+
 
     private int itemType;
     private int spanSize;
@@ -48,11 +51,22 @@ public class HomeCenterItem extends MyMultiItemEntity {
 
     //序号
     private int position;
+    //高度
+    private int height;
     //顶部是否是圆角
     private boolean topRounded;
     //底部是否是圆角
     private boolean bottomRounded;
 
+
+    public HomeCenterItem(int itemType, int placeholderHeight) {
+        if (itemType == HOMECENTER_HOME_TOP_PLACEHOLDER) {
+            this.itemType = itemType;
+            this.spanSize = 10;
+            this.height = placeholderHeight;
+            LogUtil.i("顶部占位高度：" + placeholderHeight);
+        }
+    }
 
     public HomeCenterItem(int itemType, int spanSize, List<CustomData> bannerList) {
         this.itemType = itemType;
@@ -111,6 +125,14 @@ public class HomeCenterItem extends MyMultiItemEntity {
         this.imgUrl = unionItemData.getS_img();
         this.topRounded = topRounded;
         this.bgColor = bgColor;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public HomeCenterItem(int itemType, int spanSize, int position, HomeCenterItemBean.UnionClassifyDataListBean unionClassifyData, String bgColor, boolean topRounded, boolean bottomRounded) {
@@ -261,6 +283,7 @@ public class HomeCenterItem extends MyMultiItemEntity {
         this.btText_2 = item.getBtText_2();
         this.subscript = item.getSubscript();
         this.status = item.getStatus();
+        this.height = item.getHeight();
         this.itemType = item.getItemType();
         this.spanSize = item.getSpanSize();
         this.imgUrl = item.getImgUrl();

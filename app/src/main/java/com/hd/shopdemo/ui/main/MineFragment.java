@@ -68,7 +68,7 @@ public class MineFragment extends BaseFragment {
         return rootView;
     }
 
-    int statusBarBgColor;
+    private int statusBarBgColor;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -82,7 +82,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.getmPrevious() == 3) {
+        if (MainActivity.getmPrevious() == 4) {
             StatusBarUtil.immersive(mActivity, statusBarBgColor, 0);
             setStatusBg(statusBarBgColor, 0);
             initDatas();

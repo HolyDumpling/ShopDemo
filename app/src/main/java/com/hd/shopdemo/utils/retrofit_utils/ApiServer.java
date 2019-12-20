@@ -25,10 +25,10 @@ public interface ApiServer {
     String BUYPRODUCT_PRODUCTLIST = "/api/buyProduct_productList";
 
     /*****首页底部商品列表*****/
-    String HOME_BOTTOMGOODSLIST = "/goods/getItemList";
+    String HOME_BOTTOMGOODSLIST = "home/getItemList";
 
     /*****首页内容*****/
-    String HOME_CENTERDATA = "/goods/responseHeadData";
+    String HOME_CENTERDATA = "home/responseHeadData";
 
     @POST(HOME_BOTTOMGOODSLIST)
     @FormUrlEncoded

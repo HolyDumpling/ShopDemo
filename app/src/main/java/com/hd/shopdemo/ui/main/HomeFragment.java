@@ -4,9 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,11 +28,11 @@ import com.hd.shopdemo.ui.home.HomeCenterItem;
 import com.hd.shopdemo.ui.home.HomeContentAdapter;
 import com.hd.shopdemo.ui.home.bean.HomeBottomGoodsItemBean;
 import com.hd.shopdemo.ui.home.bean.HomeCenterItemBean;
+import com.hd.shopdemo.utils.ImageUtil;
 import com.hd.shopdemo.utils.LogUtil;
 import com.hd.shopdemo.utils.TextUtil;
 import com.hd.shopdemo.utils.retrofit_utils.RetrofitUtil;
 import com.hd.shopdemo.utils.status_bar_utils.StatusBarUtil;
-import com.ms.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +50,20 @@ public class HomeFragment extends BaseFragment {
 
     @BindView(R.id.ll_home_root)
     LinearLayout ll_home_root;
-    @BindView(R.id.ll_nav)
-    LinearLayout ll_nav;
+    @BindView(R.id.rl_nav)
+    RelativeLayout rl_nav;
+    @BindView(R.id.top_ruler)
+    View top_ruler;
     @BindView(R.id.rcv_homecenter)
     RecyclerView rcv_homecenter;
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeLayout;
+
+
+    @BindView(R.id.et_search_key_1)
+    EditText et_search_key_1;
+    @BindView(R.id.iv_headImg)
+    ImageView iv_headImg;
 
     HomeContentAdapter homeContentAdapter;
     GridLayoutManager gridLayoutManager;
@@ -79,43 +91,103 @@ public class HomeFragment extends BaseFragment {
         super.onResume();
         if (MainActivity.getmPrevious() == 0) {
             StatusBarUtil.immersive(mActivity, statusBarBgColor);
-            ll_nav.setBackgroundColor(statusBarBgColor);
+            rl_nav.setBackgroundColor(statusBarBgColor);
+            playBanner(true);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        playBanner(false);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+        LogUtil.i("切换页面，首页：" + hidden);
         if (!hidden) {
             StatusBarUtil.immersive(mActivity, statusBarBgColor);
-            ll_nav.setBackgroundColor(statusBarBgColor);
+            rl_nav.setBackgroundColor(statusBarBgColor);
+            playBanner(true);
         } else {
-
+            playBanner(false);
         }
     }
+
+    int top_rulerWidth_min = 0;
+    int top_rulerWidth_max = 0;
 
     @Override
     protected void initViews() {
         LogUtil.i("刷新数据：创建热门页");
+        int dp_45 = ImageUtil.dip2px(mContext, 45);
+        int dp_30 = ImageUtil.dip2px(mContext, 30);
+        int dp_20 = ImageUtil.dip2px(mContext, 20);
+        int dp_5 = ImageUtil.dip2px(mContext, 5);
+
+        top_ruler.post(new Runnable() {
+            @Override
+            public void run() {
+                top_rulerWidth_min = top_ruler.getMeasuredWidth();
+            }
+        });
+        et_search_key_1.post(new Runnable() {
+            @Override
+            public void run() {
+                top_rulerWidth_max = et_search_key_1.getMeasuredWidth();
+            }
+        });
         gridLayoutManager = new GridLayoutManager(mContext, 10);
         List<HomeCenterItem> homeCenterItems = new ArrayList<>();
         homeContentAdapter = new HomeContentAdapter(mContext, homeCenterItems, HomeCenterItem.HOMECENTER_TYPE_COUNT);
         rcv_homecenter.setLayoutManager(gridLayoutManager);
+        rl_nav.post(new Runnable() {
+            @Override
+            public void run() {
+                List<HomeCenterItem> swepBannerDataList = new ArrayList<>();
+                swepBannerDataList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_TOP_PLACEHOLDER, rl_nav.getMeasuredHeight()));
+                homeContentAdapter.setCenterDataItem(HomeCenterItem.HOMECENTER_HOME_TOP_PLACEHOLDER, swepBannerDataList);
+            }
+        });
         homeContentAdapter.setOnChangeStatusBarBg(new HomeContentAdapter.OnChangeStatusBarBg() {
             @Override
             public void changeStatusBarBg(int bgColor) {
-                ll_nav.setBackgroundColor(bgColor);
+                statusBarBgColor = bgColor;
+                rl_nav.setBackgroundColor(bgColor);
                 StatusBarUtil.immersive(mActivity, bgColor);
             }
         });
+        RelativeLayout.LayoutParams rllp_et_search_key_1 = (RelativeLayout.LayoutParams) et_search_key_1.getLayoutParams();
 
         rcv_homecenter.setAdapter(homeContentAdapter);
         rcv_homecenter.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                int newTopMargin = rllp_et_search_key_1.topMargin - dy;
+                LogUtil.i("滑动事件坐标监听：" + dp_45 + "，" + dy + "，" + newTopMargin);
+                if (newTopMargin <= dp_5) {
+                    rllp_et_search_key_1.topMargin = dp_5;
+                    iv_headImg.setAlpha((float) 0);
+                    rllp_et_search_key_1.width = top_rulerWidth_min;
+                } else if (newTopMargin >= dp_45) {
+                    rllp_et_search_key_1.topMargin = dp_45;
+                    iv_headImg.setAlpha((float) 1);
+                    rllp_et_search_key_1.width = top_rulerWidth_max;
+                } else {
+                    rllp_et_search_key_1.topMargin = newTopMargin;
+                    double p = 1.0 - ((dp_45 * 1.0 - newTopMargin) / dp_20);
+                    iv_headImg.setAlpha((float) p);
+                    int subWidth = (int) (top_rulerWidth_min + (top_rulerWidth_max - top_rulerWidth_min) * p);
+                    if (subWidth <= top_rulerWidth_min)
+                        subWidth = top_rulerWidth_min;
+                    rllp_et_search_key_1.width = subWidth;
+                }
+                et_search_key_1.setLayoutParams(rllp_et_search_key_1);
+
                 int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
                 LogUtil.i("滑动事件监听：" + firstVisibleItemPosition);
-                if (firstVisibleItemPosition == 0) {
+                if (firstVisibleItemPosition <= 1) {
                     playBanner(true);
                 } else {
                     playBanner(false);
@@ -139,16 +211,10 @@ public class HomeFragment extends BaseFragment {
         swipeLayout.setRefreshing(true);
     }
 
-    private Banner homeBanner;
 
     private void stopRefresh() {
         homeContentAdapter.setEnableLoadMore(true);
         swipeLayout.setRefreshing(false);
-        if (homeContentAdapter.getData().size() > 0 && homeContentAdapter.getData().get(0).getItemType() == HomeCenterItem.HOMECENTER_HOME_BANNER)
-            homeBanner = (Banner) homeContentAdapter.getViewByPosition(rcv_homecenter, 0, R.id.banner);
-        if (homeBanner != null)
-            LogUtil.i("BannerView hashCode: " + homeBanner.hashCode());
-        LogUtil.i("首页banner  ：成功捕获Banner" + homeBanner);
         rcv_homecenter.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -160,52 +226,60 @@ public class HomeFragment extends BaseFragment {
 
 
     public void playBanner(boolean play) {
-        if (homeBanner != null && gridLayoutManager != null) {
-            if (play && !homeBanner.isStart()) {
-                if (gridLayoutManager.findFirstVisibleItemPosition() == 0) {
-                    LogUtil.i("首页banner：成功播放Banner");
-                    homeBanner.startAutoPlay();
+        if (gridLayoutManager != null) {
+            if (play) {
+                if (gridLayoutManager.findFirstVisibleItemPosition() <= 1) {
+                    homeContentAdapter.startBanner();
                 }
-            } else if (!play && homeBanner.isStart()) {
-                LogUtil.i("首页banner：成功暂停Banner");
-                homeBanner.stopAutoPlay();
+            } else {
+                homeContentAdapter.stopBanner();
             }
-        } else
-            LogUtil.i("首页banner：已经是个空的了：播放：" + play);
+        }
     }
-
-    public void releaseBanner() {
-        if (homeBanner != null) {
-            LogUtil.i("首页banner  ：成功释放Banner" + homeBanner);
-            homeBanner.stopAutoPlay();
-            homeBanner.releaseBanner();
-            homeBanner = null;
-        } else
-            LogUtil.i("首页banner  ：已经是个空的了");
-    }
-
 
     private String img1 = AppConfig.APP_SERVER_ADDRESS + "/public/images/image_001.jpg";
 
     @Override
     protected void initDatas() {
         loadHomeCenterData();
-        //refreshData();
         page = 1;
         loadHomeBottomGoodsList();
     }
 
+    String[] bgColors = {"#a15949", "#57b3f0", "#73c037", "#78a0a0", "#03a28a", "#6a73c8", "#756315"};
+    String[] banners = {
+            "http://onecdndev.baozhen100.com/seller/201911/f8b0e27fd4f54907beb565870edc4d53.jpg",
+            "http://onecdndev.baozhen100.com/seller/201911/ee7e2cb4a88d405bb7f5b613c58621de.jpg",
+            "http://onecdndev.baozhen100.com/seller/201911/81f1f7e835b64f2cb7e9dbbb80504821.png",
+            "http://onecdndev.baozhen100.com/seller/201912/5b35bbb84d3542d3bb56ab6002dbfe15.jpg",
+            "http://onecdndev.baozhen100.com/seller/201911/0b454b2ee1cb40d890c6107edbf0814a.png",
+            "http://onecdndev.baozhen100.com/seller/201911/11b515f494d94167916591ee9e955624.png",
+            "http://onecdndev.baozhen100.com/seller/201908/c4143947f2964294a41afe3ddf1301b3.jpg"
+    };
 
     public void setAdapterData(HomeCenterItemBean homeContentBean) {
+        goods_headImg = homeContentBean.getGoods_head();
         //添加Banner
         List<HomeCenterItemBean.BannerDataListBean> bannerDataList = homeContentBean.getBannerDataList();
         String jsonStr = new Gson().toJson(homeContentBean);
         LogUtil.i("打印数据：" + jsonStr);
         List<CustomData> homeBannerList = new ArrayList<>();
+/*
         for (int i = 0; i < bannerDataList.size(); i++) {
             HomeCenterItemBean.BannerDataListBean bannerData = bannerDataList.get(i);
             String img = bannerData.getS_img();
             String backColor = bannerData.getBgColor();
+            String type = "" + bannerData.getType();
+            String gid = "" + bannerData.getG_id();
+            String sid = "" + bannerData.getS_id();
+            homeBannerList.add(new CustomData(img, "", backColor, false, type, gid, sid, ""));
+        }
+*/
+
+        for (int i = 0; i < 3; i++) {
+            HomeCenterItemBean.BannerDataListBean bannerData = bannerDataList.get(i);
+            String img = banners[i];
+            String backColor = bgColors[i];
             String type = "" + bannerData.getType();
             String gid = "" + bannerData.getG_id();
             String sid = "" + bannerData.getS_id();
@@ -303,7 +377,6 @@ public class HomeFragment extends BaseFragment {
         }
         homeContentAdapter.setCenterDataItem(HomeCenterItem.HOMECENTER_HOME_SINGLE_ITEM_2, swepSingleItem_2_List);
 
-        stopRefresh();
     }
 
     private int page = 1;
@@ -311,6 +384,8 @@ public class HomeFragment extends BaseFragment {
     private int bottomGoodsCount = 0;
 
     private boolean bottomGoodsLoading = false;
+
+    private String goods_headImg = "";
 
     private void loadHomeBottomGoodsList() {
         if (bottomGoodsLoading)
@@ -329,7 +404,7 @@ public class HomeFragment extends BaseFragment {
                             if (page == 1) {
                                 bottomGoodsCount = 0;
                                 List<HomeCenterItem> homeCenterItemList = new ArrayList<>();
-                                homeCenterItemList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_DOUBLE_TITLE, 10, bean.getData().getItemHeadImg(), ""));
+                                homeCenterItemList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_DOUBLE_TITLE, 10, goods_headImg, ""));
                                 for (HomeBottomGoodsItemBean.ItemsBean item : bean.getData().getItemList()) {
                                     homeCenterItemList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_DOUBLE_ITEM, 5, bottomGoodsCount, item));
                                     bottomGoodsCount++;

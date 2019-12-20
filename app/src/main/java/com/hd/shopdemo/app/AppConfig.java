@@ -6,7 +6,7 @@ package com.hd.shopdemo.app;
 public class AppConfig {
     // 生产服务器    https://he.keduoduo100.com
     // 测试服务器    https://bz100.snmun.com
-    public final static String APP_SERVER_ADDRESS = "http://139.196.212.61:8080";
+    public final static String APP_SERVER_ADDRESS = "http://139.196.212.61:8080/ShopDemo/";
     //public static URI websocketUIR = URI.create("ws://echo.websocket.org");
     //全部页面中，标题颜色以及系统状态栏颜色
     public static String statusBgColor = "";
