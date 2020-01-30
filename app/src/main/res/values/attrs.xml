@@ -7,4 +7,17 @@
         <attr name="bgColor" format="color" />
     </declare-styleable>
 
+
+    <!--仿京东分类轮播图的属性-->
+    <declare-styleable name="Banner_ImitateJDClassify">
+        <attr name="maxShowItemNum" format="integer" />
+        <attr name="childViewPadding_TB" format="dimension" />
+        <attr name="childViewPadding_LR" format="dimension" />
+        <attr name="windowFramePadding" format="dimension" />
+        <attr name="direction" format="enum">
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+    </declare-styleable>
+
 </resources>

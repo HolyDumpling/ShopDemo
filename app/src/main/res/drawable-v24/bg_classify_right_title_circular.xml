@@ -3,8 +3,8 @@
 
     <!-- 背景色 -->
     <corners
-        android:topLeftRadius="5dp"
-        android:topRightRadius="5dp" />
+        android:topLeftRadius="15dp"
+        android:topRightRadius="15dp" />
     <!-- 圆角 -->
     <solid android:color="@color/white" />
 </shape>

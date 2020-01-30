@@ -289,6 +289,7 @@ public class HomeFragment extends BaseFragment {
         swepBannerDataList.add(new HomeCenterItem(HomeCenterItem.HOMECENTER_HOME_BANNER, 10, homeBannerList));
         homeContentAdapter.setCenterDataItem(HomeCenterItem.HOMECENTER_HOME_BANNER, swepBannerDataList);
 
+
         //添加分类
         List<HomeCenterItemBean.ClassifyDataListBean> classifyDataList = homeContentBean.getClassifyDataList();
         List<HomeCenterItem> swepClassifyItemList = new ArrayList<>();

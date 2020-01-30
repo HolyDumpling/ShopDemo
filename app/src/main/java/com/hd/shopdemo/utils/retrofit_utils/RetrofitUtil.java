@@ -4,6 +4,8 @@ package com.hd.shopdemo.utils.retrofit_utils;
 import com.hd.shopdemo.app.AppConfig;
 import com.hd.shopdemo.bean.BaseBean;
 import com.hd.shopdemo.bean.DataDemoBean;
+import com.hd.shopdemo.ui.classify.bean.ClassifyLeftBean;
+import com.hd.shopdemo.ui.classify.bean.ClassifyRightBean;
 import com.hd.shopdemo.ui.home.bean.HomeBottomGoodsItemBean;
 import com.hd.shopdemo.ui.home.bean.HomeCenterItemBean;
 import com.hd.shopdemo.utils.LogUtil;
@@ -70,6 +72,15 @@ public class RetrofitUtil {
         mApiServer.getHomeCenterItemBean().enqueue(callback);
     }
 
+    public void getClassifyLeftItemBean(Callback<BaseBean<ClassifyLeftBean>> callback) {
+        LogUtil.i("分类左侧   pams：");
+        mApiServer.getClassifyLeftData().enqueue(callback);
+    }
+
+    public void getClassifyRightItemBean(Callback<BaseBean<ClassifyRightBean>> callback) {
+        LogUtil.i("分类右侧   pams：");
+        mApiServer.getClassifyRightData().enqueue(callback);
+    }
 
     ////下面都是没用的
     public void getBuyproductProductlist(String uid, String longAlt, String pageIndex, String pageSize, String ptid, String cid, Callback<DataDemoBean> callback) {

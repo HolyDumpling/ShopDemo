@@ -1,5 +1,7 @@
 package com.hd.shopdemo.bean;
 
+import com.google.gson.Gson;
+
 public class BaseBean<T> {
     private T data;
     private int code;
@@ -27,5 +29,9 @@ public class BaseBean<T> {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getJSON_Str() {
+        return new Gson().toJson(this);
     }
 }

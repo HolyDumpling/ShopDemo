@@ -3,6 +3,8 @@ package com.hd.shopdemo.utils.retrofit_utils;
 
 import com.hd.shopdemo.bean.BaseBean;
 import com.hd.shopdemo.bean.DataDemoBean;
+import com.hd.shopdemo.ui.classify.bean.ClassifyLeftBean;
+import com.hd.shopdemo.ui.classify.bean.ClassifyRightBean;
 import com.hd.shopdemo.ui.home.bean.HomeBottomGoodsItemBean;
 import com.hd.shopdemo.ui.home.bean.HomeCenterItemBean;
 
@@ -30,6 +32,11 @@ public interface ApiServer {
     /*****首页内容*****/
     String HOME_CENTERDATA = "home/responseHeadData";
 
+    /*****分类左侧内容*****/
+    String CLASSIFY_LEFTLIST = "classInfo/getClassCount";
+    /*****分类右侧内容*****/
+    String CLASSIFY_RIGHTLIST = "classInfo/getRecommendationList";
+
     @POST(HOME_BOTTOMGOODSLIST)
     @FormUrlEncoded
     @Headers("Content-Type:application/x-www-form-urlencoded")
@@ -38,6 +45,11 @@ public interface ApiServer {
     @POST(HOME_CENTERDATA)
     Call<BaseBean<HomeCenterItemBean>> getHomeCenterItemBean();
 
+    @POST(CLASSIFY_LEFTLIST)
+    Call<BaseBean<ClassifyLeftBean>> getClassifyLeftData();
+
+    @POST(CLASSIFY_RIGHTLIST)
+    Call<BaseBean<ClassifyRightBean>> getClassifyRightData();
 
 
     @POST(BUYPRODUCT_PRODUCTLIST)

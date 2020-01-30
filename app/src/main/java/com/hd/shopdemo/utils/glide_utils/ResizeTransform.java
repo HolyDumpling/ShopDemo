@@ -43,7 +43,6 @@ public class ResizeTransform extends BitmapTransformation {
         if (type == SHORT_SIDE_SCALING || type == LONG_SIDE_SCALING || type == PROPORTIONAL_SCALING)
             return getResizeBitmap(pool, toTransform, outWidth, outHeight);
         else {
-            //Bitmap resizeImage = ImageUtil.resizeImg_ProportionalScaling(toTransform,outWidth,outHeight);
             return ImageUtil.scaleImage(toTransform, outWidth, outHeight);
         }
     }

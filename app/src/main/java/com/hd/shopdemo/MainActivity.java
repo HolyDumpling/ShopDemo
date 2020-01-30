@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hd.shopdemo.app.PermissionCode;
 import com.hd.shopdemo.base.BaseActivity;
+import com.hd.shopdemo.ui.main.CartFragment;
 import com.hd.shopdemo.ui.main.ClassifyFragment;
 import com.hd.shopdemo.ui.main.HomeFragment;
 import com.hd.shopdemo.ui.main.MineFragment;
@@ -35,7 +36,7 @@ public class MainActivity extends BaseActivity {
     public final static Class<Fragment>[] MAIN_TAB_FRAGMENTS = new Class[]{
             HomeFragment.class,
             ClassifyFragment.class,
-            MineFragment.class,
+            CartFragment.class,
             MineFragment.class,
             MineFragment.class
     };
